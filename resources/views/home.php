@@ -16,7 +16,7 @@
                     'iconPath' => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z'
                 ]); 
                 ?>
-
+                <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/1Yn09a8m9fdptKgG9NUsWs?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 <!-- Creazioni -->
                 <div id="creazioni" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 cursor-pointer">
                     <div class="bg-gradient-to-br from-purple-500 to-purple-700 h-40 flex items-center justify-center">
@@ -30,7 +30,7 @@
                         <a href="#" class="inline-block text-purple-600 font-bold hover:text-purple-700">Scopri →</a>
                     </div>
                 </div>
-
+                
                 <!-- ViGASecurity -->
                 <div id="vigasecurity" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 cursor-pointer">
                     <div class="bg-gradient-to-br from-yellow-500 to-yellow-700 h-40 flex items-center justify-center">
