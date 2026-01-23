@@ -29,18 +29,15 @@
                 ?>
                 
                 <!-- ViGASecurity -->
-                <div id="vigasecurity" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 cursor-pointer">
-                    <div class="bg-gradient-to-br from-yellow-500 to-yellow-700 h-40 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.77V12H5V6.3l7-3.11v8.8z"/>
-                        </svg>
-                    </div>
-                    <div class="p-6 bg-white">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">ViGASecurity</h3>
-                        <p class="text-gray-600 mb-4">Informazioni essenziali sulla sicurezza informatica. Scopri come proteggerti online e rimani al sicuro nel mondo digitale.</p>
-                        <a href="#" class="inline-block text-yellow-600 font-bold hover:text-yellow-700">Leggi di più →</a>
-                    </div>
-                </div>
+                  <?php component('cards/section-card', [
+                    'id' => 'vigasecurity',
+                    'titolo' => 'VigaSecurity',
+                    'descrizione' => 'Informazioni essenziali sulla sicurezza informatica. Scopri come proteggerti online e rimani al sicuro nel mondo digitale.',
+                    'gradientFrom' => 'from-yellow-500',
+                    'gradientTo' => 'to-yellow-700',
+                    'iconPath' => 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.77V12H5V6.3l7-3.11v8.8z'
+                ]); 
+                ?>
 
                 <!-- Giornata della Terra -->
                 <div id="giornata-terra" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
