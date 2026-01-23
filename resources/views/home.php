@@ -26,7 +26,7 @@
                     </div>
                     <div class="p-6 bg-white">
                         <h3 class="text-2xl font-bold text-gray-800 mb-2">Creazioni</h3>
-                        <p class="text-gray-600 mb-4">Esplora i progetti creativi della comunità. Da arte digitale a progetti innovativi, scopri le creazioni straordinarie dei nostri membri.</p>
+                        <p class="text-gray-600 mb-4">NIGGERS</p>
                         <a href="#" class="inline-block text-purple-600 font-bold hover:text-purple-700">Scopri →</a>
                     </div>
                 </div>
