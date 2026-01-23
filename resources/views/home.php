@@ -18,19 +18,16 @@
                 ?>
 
                 <!-- Creazioni -->
-                <div id="creazioni" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 cursor-pointer">
-                    <div class="bg-gradient-to-br from-purple-500 to-purple-700 h-40 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                    </div>
-                    <div class="p-6 bg-white">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Creazioni</h3>
-                        <p class="text-gray-600 mb-4">Esplora i progetti creativi della comunità. Da arte digitale a progetti innovativi, scopri le creazioni straordinarie dei nostri membri.</p>
-                        <a href="#" class="inline-block text-purple-600 font-bold hover:text-purple-700">Scopri →</a>
-                    </div>
-                </div>
-
+                 <?php component('cards/section-card', [
+                    'id' => 'creazioni',
+                    'titolo' => 'Creazioni',
+                    'descrizione' => 'Esplora i progetti creativi della comunità. Da arte digitale a progetti innovativi, scopri le creazioni straordinarie dei nostri membri.',
+                    'gradientFrom' => 'from-purple-500',
+                    'gradientTo' => 'to-purple-700',
+                    'iconPath' => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
+                ]); 
+                ?>
+                
                 <!-- ViGASecurity -->
                 <div id="vigasecurity" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 cursor-pointer">
                     <div class="bg-gradient-to-br from-yellow-500 to-yellow-700 h-40 flex items-center justify-center">
