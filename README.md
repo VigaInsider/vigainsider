@@ -9,13 +9,31 @@ Prima di contribuire:
 
 * attiva la **Two-Factor Authentication (2FA)** su GitHub
 * chiedi di far parte di un team (frontend, backend, etc)
-* clona il repository:
 
-## 2. Branching Model
+## 1. Clona il repository: 
+``` bash
+git clone https://github.com/VigaInsider/vigainsider.git
+```
+
+## 2. Avvia un container
+```bash
+docker-compose up -d --build
+```
+
+## 3. Accesso ai servizi
+
+* **PHP/Apache** → [http://localhost:8080](http://localhost:8080)
+* **phpMyAdmin** → [http://localhost:8888](http://localhost:8888)
+  * user: `vigainsider`, pass: `vigainsider`, DB: `vigainsider_db`
+  * root: `root`, pass: `root`, DB: `vigainsider_db`
+* **MySQL** → Porta `3306`, root password `root`
+
+
+## 4. Branching Model
 
 Tutto lo sviluppo avviene tramite branch dedicati.
 
-## Branch principali
+### Branch principali
 
 | Branch      | Uso                                |
 | ----------- | ---------------------------------- |
@@ -24,7 +42,7 @@ Tutto lo sviluppo avviene tramite branch dedicati.
 | `feature/*` | nuove feature                      |
 | `fix/*`     | bugfix                             |
 
-## Regole generali
+### Regole generali
 
 * **mai** (**MAI**) lavorare direttamente su `main` o `develop`
 * ogni sviluppo deve partire dal branch `develop` e creare un nuovo branch di tipo `feature/*` o `fix/*`:
@@ -36,15 +54,15 @@ feature/login-page
 fix/header-layout
 ```
 
-## 3. Commit Guidelines
+## 5. Commit Guidelines
 
 Usiamo commit generati di Copilot
 
-## 4. Issues
+## 6. Issues
 
 Ogni attività deve avere una Issue associata che ti è stata assegnata da un responsabile
 
-## 5. Pull Requests
+## 7. Pull Requests
 
 Tutte le modifiche devono passare tramite **Pull Request**.
 
@@ -57,7 +75,7 @@ Tutte le modifiche devono passare tramite **Pull Request**.
 * richiedi revisione a un reviewer
 * la PR deve avere almeno **1 approvazione**
 
-## 6. Review del Codice
+## 7. Review del Codice
 
 Il reviewer deve verificare:
 
@@ -74,7 +92,7 @@ Il reviewer può:
 
 Il merge avviene solo dopo l'approvazione.
 
-## 7. Best Practice
+## 8. Best Practice
 
 * mantieni PR piccole e focalizzate
 * non includere più feature in un'unica PR

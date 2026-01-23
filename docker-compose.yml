@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  apache:
+    build:
+      dockerfile: Dockerfile
+    container_name: vigainsider-apache
+    restart: always
+    ports:
+      - "8080:80"   # Apache disponibile su localhost:8080
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql
+    container_name: vigainsider-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vigainsider_db
+      MYSQL_USER: vigainsider
+      MYSQL_PASSWORD: vigainsider
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: vigainsider-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8888:80"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
