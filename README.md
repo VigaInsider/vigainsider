@@ -10,17 +10,29 @@ Prima di contribuire:
 * attiva la **Two-Factor Authentication (2FA)** su GitHub
 * chiedi di far parte di un team (frontend, backend, etc)
 
-## 1. Clona il repository: 
+Software e strumenti necessari:
+
+* [Visual Studio Code](https://code.visualstudio.com/) con le estensioni:
+  * Git Graph
+  * GitHub Pull Requests
+  * Tailwind CSS IntelliSense
+* [Docker Desktop](https://www.docker.com/)
+
+## 2. Scarica il codice sorgente: 
+
+Clona il repository
 ``` bash
 git clone https://github.com/VigaInsider/vigainsider.git
 ```
+Rinomina il file .env.develop in .env
 
-## 2. Avvia un container
+## 3. Avvia un container
+Aprire un terminale nella directory di sviluppo vigainsider ed eseguire:
 ```bash
 docker-compose up -d --build
 ```
 
-## 3. Accesso ai servizi
+## 4. Accesso ai servizi
 
 * **PHP/Apache** → [http://localhost:8080](http://localhost:8080)
 * **phpMyAdmin** → [http://localhost:8888](http://localhost:8888)
@@ -28,10 +40,15 @@ docker-compose up -d --build
   * root: `root`, pass: `root`, DB: `vigainsider_db`
 * **MySQL** → Porta `3306`, root password `root`
 
-
-## 4. Branching Model
+## 5. Branching Model
 
 Tutto lo sviluppo avviene tramite branch dedicati.
+
+Ricordarsi di fare regolarmente il fetch dei brench, specialmente prima di iniziare a sviluppare, eliminando i branch non più utilizzati tramite prune
+
+```bash
+git fetch --prune
+```
 
 ### Branch principali
 
@@ -54,15 +71,15 @@ feature/login-page
 fix/header-layout
 ```
 
-## 5. Commit Guidelines
+## 6. Commit Guidelines
 
 Usiamo commit generati di Copilot
 
-## 6. Issues
+## 7. Issues
 
 Ogni attività deve avere una Issue associata che ti è stata assegnata da un responsabile
 
-## 7. Pull Requests
+## 8. Pull Requests
 
 Tutte le modifiche devono passare tramite **Pull Request**.
 
@@ -75,7 +92,7 @@ Tutte le modifiche devono passare tramite **Pull Request**.
 * richiedi revisione a un reviewer
 * la PR deve avere almeno **1 approvazione**
 
-## 7. Review del Codice
+## 9. Review del Codice
 
 Il reviewer deve verificare:
 
@@ -92,7 +109,7 @@ Il reviewer può:
 
 Il merge avviene solo dopo l'approvazione.
 
-## 8. Best Practice
+## 10. Best Practice
 
 * mantieni PR piccole e focalizzate
 * non includere più feature in un'unica PR
