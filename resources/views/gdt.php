@@ -6,6 +6,8 @@
        ]); 
        ?>
 
+       <h1>>TITOLO</h1>
+
        <div class="container mx-auto px-4 py-16 max-w-7xl">
          <section class="bg-white p-8 md:p-12">
            <h2 class="text-4xl md:text-5xl font-bold text-green-700 mb-8 text-center">Giornata della Terra</h2>
