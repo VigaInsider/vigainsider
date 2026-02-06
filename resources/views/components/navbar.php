@@ -1,3 +1,7 @@
+<?php /**
+ * Component: Navigation Bar
+ */ ?>
+
 <!-- Navigation Bar -->
         <nav class="bg-gradient-to-l from-[#ff2b4b] via-[#711879] to-[#6366f1] text-white shadow-2xl ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
