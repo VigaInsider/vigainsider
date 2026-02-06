@@ -20,6 +20,38 @@ $router->get('/gdt', function() {
     ]);
 });
 
+$router->get('/VGN', function() {
+    view('VGN', [
+        'title' => 'VigaInsider - VigaNews',
+    ]);
+});
+$router->get('/creazioni', function() {
+    view('creazioni', [
+        'title' => 'VigaInsider - Creazioni',
+    ]);
+});
+$router->get('/VGSec', function() {
+    view('VGSec', [
+        'title' => 'VigaInsider - VigaSecurity',
+    ]);
+});
+$router->get('/VGSolidale', function() {
+    view('VGSolidale', [
+        'title' => 'VigaInsider - VigaSolidale',
+    ]);
+});
+$router->get('/GDI', function() {
+    view('GDI', [
+        'title' => 'VigaInsider - Giochi di Informatica',
+    ]);
+});
+$router->get('/CICL', function() {
+    view('CICL', [
+        'title' => 'VigaInsider - CICLab',
+    ]);
+});
+
+
 $router->get('health', function() {
     echo json_encode(['status' => 'ok']);
 });
