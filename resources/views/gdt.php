@@ -1,8 +1,16 @@
+<?php
+$links = [
+    ['href' => '#classi', 'text' => 'Classi'],
+    ['href' => '#attivita', 'text' => 'Attività'],
+    ['href' => '#storico', 'text' => 'Storico']
+];
+?>
 <?php layout('components/layout'); ?>
 
        <?php component('hero/hero-section', [
               'background' => '../../img/gdt/hero.jpg',
-              'titolo' => 'Giornata della Terra'
+              'titolo' => 'Giornata della Terra',
+              'links' => $links
        ]); 
        ?>
 
