@@ -83,5 +83,18 @@
                 ]); 
                 ?>
 
+                <!-- VIgaSpecialWeek -->
+                  <?php component('cards/section-card', [
+                    'id' => 'VIgaSpecialWeek',
+                    'titolo' => 'VIgaSpecialWeek',
+                    'descrizione' => 'La settimana dedicata a eventi speciali e attività uniche. Un momento strutturato dedicato al recupero degli apprendimenti.',
+                    'gradientFrom' => 'from-orange-500',
+                    'gradientTo' => 'to-orange-700',
+                    'iconPath' => 'M12 4.81L15.09 8l1.41-1.41L12 .81l-4.5 4.5L9.91 8 12 4.81zM4.81 12L8 15.09l-1.41 1.41L.81 12l4.5-4.5L8 9.91 4.81 12zm14.38 0L16 15.09l1.41 1.41 4.5-4.5-4.5-4.5L16 9.91l2.19 2.09zM12 19.19l-3.09-3.09-1.41 1.41L12 23.19l4.5-4.5-1.41-1.41L12 19.19z'
+                ]); 
+                ?>
+
+
+
             </div>
         </section>
