@@ -1,7 +1,14 @@
+<?php /**
+ * Component: Hero Section
+ *
+ * @param string $titolo Titolo principale della sezione (es., "Benvenuti su VigaInsider")
+ * @param string $background URL dell'immagine di sfondo (es., "/public/img/hero-bg.jpg")
+ */ ?>
+
 <!-- Hero Section -->
 <section class="relative bg-cover bg-center text-white py-32" style="background-image: url('<?= $background ?? ''; ?>');">
     <div class="absolute inset-0 bg-black/40"></div>
-    
+
     <!-- Secondary Navbar -->
     <nav class="absolute top-0 left-0 right-0 bg-black/30 backdrop-blur-sm text-white z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,7 +22,7 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-5xl md:text-6xl font-bold mb-6"><?= $titolo ?></h1>
     </div>
