@@ -79,19 +79,19 @@
 
                <div class="bg-green-50 p-6 rounded-lg">
                  <p class="font-semibold text-green-900 mb-3">Organizzatori della giornata:</p>
-                 <p>prof. <strong>Colotta, Tornaghi, Nitan</strong> e <strong>Corcione</strong></p>
+                 <p>prof. <strong>Colotta, Tornaghi</strong> e <strong>Corcione</strong></p>
                </div>
 
                <div class="bg-blue-50 p-6 rounded-lg">
                  <p class="font-semibold text-blue-900 mb-3">Studenti e studentesse organizzatori:</p>
                  <ul class="space-y-1">
-                   <li><strong>Beretta Mattia</strong> (4G)</li>
-                   <li><strong>Bianchi Michele</strong> (4H)</li>
-                   <li><strong>Fumagalli Andrea</strong> (5L)</li>
-                   <li><strong>Furfaro Penna Jacopo</strong> (4H)</li>
-                   <li><strong>Hajek Manuel</strong> (4H)</li>
-                   <li><strong>Porchera Veronica</strong> (5H)</li>
-                   <li><strong>Riva Giorgia</strong> (5H)</li>
+                   <li><strong>Bianchi Michele</strong> (5H)</li>
+                   <li><strong>Furfaro Penna Jacopo</strong> (5H)</li>
+                   <li><strong>Hajek Manuel</strong> (5H)</li>
+                   <li><strong>Ciccarese Milena</strong> (4H)</li>
+                   <li><strong>Sanguedolce Matteo</strong> (4H)</li>
+                   <li><strong>Bonanno Samuele</strong> (4H)</li>
+                   <li><strong>Ferlin Marco</strong> (4H)</li>
                  </ul>
                </div>
 
