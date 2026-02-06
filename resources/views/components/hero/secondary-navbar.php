@@ -5,7 +5,7 @@
                     <?php
                     foreach($links as $link) {
                         ?>
-                        <a href="<?= $link['href'] ?>?>" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition"><?= $link['text'] ?></a>
+                        <a href="<?= $link['href'] ?>" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition"><?= $link['text'] ?></a>
                         <?php
                     }
                    ?>
