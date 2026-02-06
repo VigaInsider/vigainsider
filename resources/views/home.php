@@ -40,18 +40,17 @@
                 ?>
 
                 <!-- Giornata della Terra -->
-                <div id="giornata-terra" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
-                    <div class="bg-gradient-to-br from-green-500 to-green-700 h-40 flex items-center justify-center">
-                        <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-4 15l-4-4 1.41-1.41L8 14.17l6.59-6.59L16 9l-8 8z"/>
-                        </svg>
-                    </div>
-                    <div class="p-6 bg-white">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Giornata della Terra</h3>
-                        <p class="text-gray-600 mb-4">Celebriamo il nostro pianeta con iniziative sostenibili. Scopri come contribuire a un futuro più verde e responsabile.</p>
-                        <a href="/gdt" class="inline-block text-green-600 font-bold hover:text-green-700">Scopri →</a>
-                    </div>
-                </div>
+                  <?php component('cards/section-card', [
+                    'id' => 'giornata-terra',
+                    'titolo' => 'Giornata della Terra',
+                    'descrizione' => 'Celebriamo il nostro pianeta con iniziative sostenibili. Scopri come contribuire a un futuro più verde e responsabile.',
+                    'gradientFrom' => 'from-green-500',
+                    'gradientTo' => 'to-green-700',
+                    'iconPath' => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-4 15l-4-4 1.41-1.41L8 14.17l6.59-6.59L16 9l-8 8z'
+                ]); 
+                ?>
+
+            
 
                 <!-- ViGASolidale -->
                 <div id="vigasolidale" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
