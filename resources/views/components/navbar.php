@@ -18,6 +18,7 @@
                             <a href="/vigasolidale" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">ViGASolidale</a>
                             <a href="/giochi" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">Giochi di Informatica</a>
                             <a href="/ciclab" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">CICLab</a>
+                            <a href="/vsw" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">VigaSpecialWeek</a>
                         </div>
                     </div>
                 </div>
