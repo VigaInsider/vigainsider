@@ -20,6 +20,7 @@ $router->get('gdt', function() {
     ]);
 });
 
+
 $router->get('vsw', function() {
     view('vsw', [
         'title' => 'VigaInsider - vsw',
