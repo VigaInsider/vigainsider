@@ -17,6 +17,12 @@
     <div class="p-6 bg-white">
         <h3 class="text-2xl font-bold text-gray-800 mb-2"><?= $titolo ?></h3>
         <p class="text-gray-600 mb-4"><?= $descrizione ?></p>
-        <a href=<?= $route?> class="inline-block text-red-600 font-bold hover:text-red-700">Leggi di più →</a>
+        <?php
+        if(isset($route)) {
+            ?>
+            <a href=<?= $route?> class="inline-block text-red-600 font-bold hover:text-red-700">Leggi di più →</a>
+        <?php
+        }  
+        ?>
     </div>
 </div>
