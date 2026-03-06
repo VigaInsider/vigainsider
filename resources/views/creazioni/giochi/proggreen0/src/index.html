@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameArea">
+        <div id="score">Punteggio: 0</div>
+        <div id="timer">30</div>
+
+        <div id="messaggio_iniziale">
+            <h1 id="titolo">Raccolta differenziata</h1>
+            <p id="descrizione">Riconosci il rifiuto e clicca il bidone corretto!</p>
+            <button id="comincia" onclick="comincia()">Inizia il gioco</button>
+        </div>
+
+        <div class="bin" id="plasticBin" onclick="controllaRisposta('plastica')">
+            <img src="plastica.jpg" alt="" class="bidone">
+        </div>
+        <div class="bin" id="paperBin" onclick="controllaRisposta('carta')">
+            <img src="carta.jpg" alt="" class="bidone">
+        </div>
+        <div class="bin" id="glassBin" onclick="controllaRisposta('vetro')">
+            <img src="vetro.jpg" alt="" class="bidone">
+        </div>
+        <div class="bin" id="trashBin" onclick="controllaRisposta('umido')">
+            <img src="umido.jpg" alt="" class="bidone">
+        </div>
+
+        <div id="object">
+            
+        </div>
+
+        <div id="record">Record: 0</div>
+    </div>
+</body>
+<script src="app.js"></script>
+</html>
