@@ -62,6 +62,23 @@ $router->get('/vsw', function() {
     ]);
 });
 
+$router->get('/classiGdt', function() {
+    view('classiGdt', [
+        'title' => 'Gdt - classi',
+    ]);
+});
+
+$router->get('/storicoGdt', function() {
+    view('storicoGdt', [
+        'title' => 'Gdt - storico',
+    ]);
+});
+
+$router->get('/attivitaGdt', function() {
+    view('attivitaGdt', [
+        'title' => 'Gdt - attivita',
+    ]);
+});
 
 
 $router->get('health', function() {
