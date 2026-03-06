@@ -22,5 +22,5 @@
     // Controllo parametro del colore del testo
     echo $text_color ?? "text-white-500";
     ?> rounded-xl p-2 inline-block hover:shadow-lg hover:cursor-pointer transition ease-in-out delay-100 duration-210 hover:-translate-y-1">
-    <a href='<?= $destination ?? '#' ?>'><?= $content ?? "Pulsante" ?></a>
+    <a href='<?= $destination ?? ' ' ?>'><?= $content ?? "Pulsante" ?></a>
 </div>
