@@ -1,3 +1,10 @@
+<?php /**
+ * Component: Layout
+ *
+ * @param string $title Titolo della pagina (es., "Home")
+ * @param string $slot Contenuto principale della pagina
+ */ ?>
+
 <!DOCTYPE html>
 <html lang="it">
     <head>

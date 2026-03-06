@@ -5,18 +5,27 @@ Per mantenere un flusso di lavoro pulito, stabile e coordinato, **tutti gli svil
 
 ## 1. Requisiti
 
-Prima di contribuire:
-
-* attiva la **Two-Factor Authentication (2FA)** su GitHub
-* chiedi di far parte di un team (frontend, backend, etc)
-
 Software e strumenti necessari:
 
+* [Git](https://git-scm.com/install/windows)
 * [Visual Studio Code](https://code.visualstudio.com/) con le estensioni:
   * Git Graph
   * GitHub Pull Requests
   * Tailwind CSS IntelliSense
-* [Docker Desktop](https://www.docker.com/)
+* [Docker Desktop](https://www.docker.com/) da avviare quando si vuole sviluppare. Fa partire il server web + PHP + MySQL
+
+Prima di contribuire assicurati di avere Git installato e configurato:
+
+``` bash
+git config --global user.name "Il Tuo Nome"
+git config --global user.email "tua.email@example.com"
+```
+
+Successivamente:
+
+* crea un account [GitHub](https://github.com/)
+* attiva la **Two-Factor Authentication (2FA)** su GitHub
+* chiedi di far parte di un team (frontend, backend, etc)
 
 ## 2. Scarica il codice sorgente: 
 
@@ -24,7 +33,17 @@ Clona il repository
 ``` bash
 git clone https://github.com/VigaInsider/vigainsider.git
 ```
-Rinomina il file .env.develop in .env
+Posizionati nella directory vigainsider
+
+``` bash 
+cd vigainsider
+```
+Avvia Visual Studio Code
+``` bash 
+code .
+```
+
+Crea una copia del file `.env.develop` e rinominalo in `.env`
 
 ## 3. Avvia un container
 Aprire un terminale nella directory di sviluppo vigainsider ed eseguire:
@@ -99,7 +118,7 @@ Il reviewer deve verificare:
 * chiarezza del codice
 * aderenza agli standard del progetto
 * assenza di errori evidenti
-* manutennibilità
+* manutenibilità
 
 Il reviewer può:
 
