@@ -62,20 +62,20 @@ $router->get('/vsw', function() {
     ]);
 });
 
-$router->get('/classiGdt', function() {
-    view('classiGdt', [
+$router->get('/GdT/classiGdt', function() {
+    view('GdT/classiGdt', [
         'title' => 'Gdt - classi',
     ]);
 });
 
-$router->get('/storicoGdt', function() {
-    view('storicoGdt', [
+$router->get('/GdT/storicoGdt', function() {
+    view('GdT/storicoGdt', [
         'title' => 'Gdt - storico',
     ]);
 });
 
-$router->get('/attivitaGdt', function() {
-    view('attivitaGdt', [
+$router->get('/GdT/attivitaGdt', function() {
+    view('GdT/attivitaGdt', [
         'title' => 'Gdt - attivita',
     ]);
 });

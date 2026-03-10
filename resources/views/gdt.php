@@ -40,7 +40,7 @@ $links = [
                     'descrizione' => 'Visualizza le attività a cui parteciperà la tua classe!',
                     'gradientFrom' => 'from-red-500',
                     'gradientTo' => 'to-red-700',
-                    'route' => '/classiGdt',
+                    'route' => '/GdT/classiGdt',
                     'iconPath' => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z'
                 ]); 
                 ?>
@@ -52,7 +52,7 @@ $links = [
                     'descrizione' => 'Visualizza le classi che parteciperanno alla tua attività!',
                     'gradientFrom' => 'from-purple-500',
                     'gradientTo' => 'to-purple-700',
-                    'route' => '/attivitaGdt',
+                    'route' => '/GdT/attivitaGdt',
                     'iconPath' => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'
                 ]); 
                 ?>
@@ -64,7 +64,7 @@ $links = [
                     'descrizione' => 'Visualizza il programma degli scorsi anni!',
                     'gradientFrom' => 'from-yellow-500',
                     'gradientTo' => 'to-yellow-700',
-                    'route' => '/storicoGdt',
+                    'route' => '/GdT/storicoGdt',
                     'iconPath' => 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.77V12H5V6.3l7-3.11v8.8z'
                 ]); 
                 ?>
