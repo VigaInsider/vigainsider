@@ -40,61 +40,53 @@
                 ?>
 
                 <!-- Giornata della Terra -->
-                  <?php component('cards/section-card', [
-                    'id' => 'giornata-terra',
-                    'titolo' => 'Giornata della Terra',
-                    'descrizione' => 'Celebriamo il nostro pianeta con iniziative sostenibili. Scopri come contribuire a un futuro più verde e responsabile.',
-                    'gradientFrom' => 'from-green-500',
-                    'gradientTo' => 'to-green-700',
-                    'iconPath' => 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-4 15l-4-4 1.41-1.41L8 14.17l6.59-6.59L16 9l-8 8z'
-                ]); 
-                ?>
+                <div id="giornata-terra" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="bg-gradient-to-br from-green-500 to-green-700 h-40 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-4 15l-4-4 1.41-1.41L8 14.17l6.59-6.59L16 9l-8 8z"/>
+                        </svg>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Giornata della Terra</h3>
+                        <p class="text-gray-600 mb-4">Celebriamo il nostro pianeta con iniziative sostenibili. Scopri come contribuire a un futuro più verde e responsabile.</p>
+                        <a href="/gdt" class="inline-block text-green-600 font-bold hover:text-green-700">Scopri →</a>
+                    </div>
+                </div>
 
                 <!-- ViGASolidale -->
-                  <?php component('cards/section-card', [
-                    'id' => 'vigasolidale',
-                    'titolo' => 'ViGASolidale',
-                    'descrizione' => 'Progetti di solidarietà e responsabilità sociale. Unisciti a noi per fare la differenza nella comunità e nel mondo.',
-                    'gradientFrom' => 'from-pink-500',
-                    'gradientTo' => 'to-pink-700',
-                    'iconPath' => 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'
-                ]); 
-                ?>
+                <div id="vigasolidale" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="bg-gradient-to-br from-pink-500 to-pink-700 h-40 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">ViGASolidale</h3>
+                        <p class="text-gray-600 mb-4">Progetti di solidarietà e responsabilità sociale. Unisciti a noi per fare la differenza nella comunità e nel mondo.</p>
+                        <a href="#" class="inline-block text-pink-600 font-bold hover:text-pink-700">Scopri →</a>
+                    </div>
+                </div>
 
                 <!-- Giochi di Informatica -->
-                  <?php component('cards/section-card', [
-                    'id' => 'giochi',
-                    'titolo' => 'Giochi di Informatica',
-                    'descrizione' => 'Partecipa a competizioni stimolanti e sfida le tue abilità informatiche. Divertiti e apprendi con i nostri giochi interattivi.',
-                    'gradientFrom' => 'from-indigo-500',
-                    'gradientTo' => 'to-indigo-700',
-                    'iconPath' => 'M21 6h-7V3c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v3H3c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zm-1 14H4V7h16v13zm-6-4c.83 0 1.5-.67 1.5-1.5S14.83 12 14 12s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-4 0c.83 0 1.5-.67 1.5-1.5S10.83 12 10 12s-1.5.67-1.5 1.5.67 1.5 1.5 1.5z'
-                ]); 
-                ?>
-                
+                <div id="giochi" class="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="bg-gradient-to-br from-indigo-500 to-indigo-700 h-40 flex items-center justify-center">
+                        <svg class="w-24 h-24 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 6h-7V3c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v3H3c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zm-1 14H4V7h16v13zm-6-4c.83 0 1.5-.67 1.5-1.5S14.83 12 14 12s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-4 0c.83 0 1.5-.67 1.5-1.5S10.83 12 10 12s-1.5.67-1.5 1.5.67 1.5 1.5 1.5z"/>
+                        </svg>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Giochi di Informatica</h3>
+                        <p class="text-gray-600 mb-4">Partecipa a competizioni stimolanti e sfida le tue abilità informatiche. Divertiti e apprendi con i nostri giochi interattivi.</p>
+                        <a href="#" class="inline-block text-indigo-600 font-bold hover:text-indigo-700">Gioca →</a>
+                    </div>
+                </div>
+
                 <!-- CICLab -->
-                  <?php component('cards/section-card', [
-                    'id' => 'ciclab',
-                    'titolo' => 'CICLab',
-                    'descrizione' => 'Il nostro laboratorio di innovazione e ricerca. Esplora progetti all\'avanguardia e collabora con esperti nel campo dell\'informatica.',
-                    'gradientFrom' => 'from-cyan-500',
-                    'gradientTo' => 'to-cyan-700',
-                    'iconPath' => 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54 1.96 2.36h5.98L19 9z'
-                ]); 
-                ?>
-
-                <!-- VIgaSpecialWeek -->
-                  <?php component('cards/section-card', [
-                    'id' => 'VIgaSpecialWeek',
-                    'titolo' => 'VIgaSpecialWeek',
-                    'descrizione' => 'La settimana dedicata a eventi speciali e attività uniche. Un momento strutturato dedicato al recupero degli apprendimenti.',
-                    'gradientFrom' => 'from-orange-500',
-                    'gradientTo' => 'to-orange-700',
-                    'iconPath' => 'M12 4.81L15.09 8l1.41-1.41L12 .81l-4.5 4.5L9.91 8 12 4.81zM4.81 12L8 15.09l-1.41 1.41L.81 12l4.5-4.5L8 9.91 4.81 12zm14.38 0L16 15.09l1.41 1.41 4.5-4.5-4.5-4.5L16 9.91l2.19 2.09zM12 19.19l-3.09-3.09-1.41 1.41L12 23.19l4.5-4.5-1.41-1.41L12 19.19z'
-                ]); 
-                ?>
-
-
-
+                <x-card 
+                    titolo="CICLab" 
+                    descrizione="Il nostro laboratorio di innovazione e ricerca. Esplora progetti all'avanguardia e collabora con esperti nel campo dell'informatica." 
+                    gradient="from-cyan-500 to-cyan-700"
+                    path="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54 1.96 2.36h5.98L19 9z"
+                />
             </div>
         </section>
