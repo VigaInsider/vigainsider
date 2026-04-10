@@ -7,9 +7,6 @@
         <div class="my-3">
             <?php component("button", [
             "content" => "Torna alla homepage",
-            "gradientFrom" => "from-blue-500",
-            "gradientTo" => "to-sky-400",
-            "text_color" => "text-[#F8F8F8]",
             "destination" => "/"
         ]) ?>
         </div>
