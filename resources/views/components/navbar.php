@@ -10,15 +10,16 @@
                         <a href="/">VigaInsider</a>
                     </div>
                     <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <a href="/viganews" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">ViGANews</a>
-                            <a href="/creazioni" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">Creazioni</a>
-                            <a href="/vigasecurity" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">ViGASecurity</a>
-                            <a href="/gdt" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">Giornata della Terra</a>
-                            <a href="/vigasolidale" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">ViGASolidale</a>
-                            <a href="/giochi" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">Giochi di Informatica</a>
-                            <a href="/ciclab" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">CICLab</a>
-                            <a href="/vsw" class="hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium transition">VigaSpecialWeek</a>
+                        <div class="ml-10 flex items-baseline space-x-2">
+                            <a href="/viganews" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">VigaNews</a>
+                            <a href="/creazioni" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">Creazioni</a>
+                            <a href="/vigasecurity" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">VigaSecurity</a>
+                            <a href="/gdt" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">Giornata della Terra</a>
+                            <a href="/vigasolidale" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">VigaSolidale</a>
+                            <a href="/giochi" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">Giochi di Informatica</a>
+                            <a href="/ciclab" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">CICLab</a>
+                            <a href="/vsw" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">VigaSpecialWeek</a>
+                            <a href="/erasmus" class="hover:bg-white/20 px-2 py-2 rounded-md text-sm font-medium transition">Erasmus</a>
                         </div>
                     </div>
                 </div>
