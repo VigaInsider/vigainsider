@@ -9,7 +9,7 @@
                 <!-- ViGANews -->
                 <?php component('cards/section-card', [
                     'id' => 'viganews',
-                    'titolo' => 'ViGANews',
+                    'titolo' => 'VigaNews',
                     'descrizione' => 'Rimani aggiornato con le ultime notizie dal mondo della tecnologia e dell\'informatica. Scopri articoli, recensioni e approfondimenti su argomenti di tendenza.',
                     'gradientFrom' => 'from-red-500',
                     'gradientTo' => 'to-red-700',
@@ -57,7 +57,7 @@
                 <!-- ViGASolidale -->
                   <?php component('cards/section-card', [
                     'id' => 'vigasolidale',
-                    'titolo' => 'ViGASolidale',
+                    'titolo' => 'VigaSolidale',
                     'descrizione' => 'Progetti di solidarietà e responsabilità sociale. Unisciti a noi per fare la differenza nella comunità e nel mondo.',
                     'gradientFrom' => 'from-pink-500',
                     'gradientTo' => 'to-pink-700',
@@ -101,6 +101,20 @@
                     'imgPath' => 'img/cards/card_vsw.jpeg'
                 ]); 
                 ?>
+                
+
+                <!-- Erasmus -->
+                  <?php component('cards/section-card', [
+                    'id' => 'Erasmus',
+                    'titolo' => 'Erasmus',
+                    'descrizione' => 'Il programma di scambio per studenti. Scopri nuove culture e amplia i tuoi orizzonti.',
+                    'gradientFrom' => 'from-purple-500',
+                    'gradientTo' => 'to-purple-700',
+                    'route' => '/erasmus',
+                    'imgPath' => 'img/cards/card_erasmus.jpg'
+                ]); 
+                ?>
+
 
 
 
