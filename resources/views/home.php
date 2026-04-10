@@ -62,7 +62,7 @@
                     'gradientFrom' => 'from-pink-500',
                     'gradientTo' => 'to-pink-700',
                     'route' => '/vigasolidale',
-                    'imgPath' => 'img/cards/campoarance.jpg'
+                    'imgPath' => 'img/cards/card_vigasolidale.jpg'
                 ]); 
                 ?>
 
@@ -74,7 +74,7 @@
                     'gradientFrom' => 'from-indigo-500',
                     'gradientTo' => 'to-indigo-700',
                     'route' => '/giochi',
-                    'imgPath' => 'img/cards/card_giornalino.jpg'
+                    'imgPath' => 'img/cards/card_giochiInformatica.jpg'
                 ]); 
                 ?>
                 
@@ -86,19 +86,19 @@
                     'gradientFrom' => 'from-cyan-500',
                     'gradientTo' => 'to-cyan-700',
                     'route' => '/ciclab',
-                    'imgPath' => 'img/cards/card_giornalino.jpg'
+                    'imgPath' => 'img/cards/card_ciclab.png'
                 ]); 
                 ?>
 
                 <!-- VIgaSpecialWeek -->
                   <?php component('cards/section-card', [
                     'id' => 'VIgaSpecialWeek',
-                    'titolo' => 'VIgaSpecialWeek',
+                    'titolo' => 'VigaSpecialWeek',
                     'descrizione' => 'La settimana dedicata a eventi speciali e attività uniche. Un momento strutturato dedicato al recupero degli apprendimenti.',
                     'gradientFrom' => 'from-orange-500',
                     'gradientTo' => 'to-orange-700',
                     'route' => '/vsw',
-                    'imgPath' => 'img/cards/card_giornalino.jpg'
+                    'imgPath' => 'img/cards/card_vsw.jpeg'
                 ]); 
                 ?>
 
