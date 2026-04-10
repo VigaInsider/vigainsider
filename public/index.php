@@ -62,6 +62,12 @@ $router->get('/vsw', function() {
     ]);
 });
 
+$router->get('/erasmus', function() {
+    view('erasmus', [
+        'title' => 'VigaInsider - Erasmus',
+    ]);
+});
+
 $router->get('/GdT/classiGdt', function() {
     view('GdT/classiGdt', [
         'title' => 'Gdt - classi',
