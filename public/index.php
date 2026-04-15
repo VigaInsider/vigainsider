@@ -86,6 +86,11 @@ $router->get('/GdT/attivitaGdt', function() {
     ]);
 });
 
+$router->get('/chisiamo', function() {
+    view('chisiamo', [
+        'title' => 'VigaInsider - Chi siamo',
+    ]);
+});
 
 $router->get('health', function() {
     echo json_encode(['status' => 'ok']);
