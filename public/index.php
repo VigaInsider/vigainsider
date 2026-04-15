@@ -37,6 +37,21 @@ $router->get('/vigasecurity', function() {
         'title' => 'VigaInsider - vigasecurity',
     ]);
 });
+$router->get('/attachi_vigasec', function() {
+    view('attachi_vigasec', [
+        'title' => 'VigaInsider - vigasecurity - attachi',
+    ]);
+});
+$router->get('/comeproteggersi_vigasec', function() {
+    view('comeproteggersi_vigasec', [
+        'title' => 'VigaInsider - vigasecurity - come_proteggersi',
+    ]);
+});
+$router->get('/chisiamo_vigasec', function() {
+    view('chisiamo_vigasec', [
+        'title' => 'VigaInsider - vigasecurity - chi_siamo',
+    ]);
+});
 
 $router->get('/vigasolidale', function() {
     view('vigasolidale', [
