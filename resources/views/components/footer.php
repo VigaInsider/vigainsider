@@ -13,7 +13,7 @@
                     <div>
                         <h5 class="font-bold mb-4">Link Rapidi</h5>
                         <ul class="text-gray-100 space-y-2">
-                            <li><a href="#" class="hover:text-gray-50 transition">Chi siamo</a></li>
+                            <li><a href="/chisiamo" class="hover:text-gray-50 transition">Chi siamo</a></li>
                             <li><a href="#" class="hover:text-gray-50 transition">Contatti</a></li>
                             <li><a href="#" class="hover:text-gray-50 transition">Privacy</a></li>
                         </ul>
