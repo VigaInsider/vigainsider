@@ -16,7 +16,7 @@ $links = [
 
        <div class="container mx-auto px-4 py-16 max-w-7xl">
          <section class="bg-white p-8 md:p-12">
-           <h2 class="text-4xl md:text-5xl font-bold text-indigo-500 mb-8 text-center">Come prottegrsi</h2>
+           <h2 class="text-4xl md:text-5xl font-bold text-indigo-500 mb-8 text-center">Come proteggersi</h2>
            
            <div class="space-y-6 text-gray-700 text-justify leading-relaxed text-lg">
             <h3 class="text-2xl md:text-3xl font-bold text-indigo-500 mb-8 text-center">Come Reagire ad un Attacco Informatico ai Nostri Dispositivi</h3>                            

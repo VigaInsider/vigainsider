@@ -1,8 +1,8 @@
 <?php
 $links = [
-    ['href' => '#attachi_vigasec', 'text' => 'Attachi'],
-    ['href' => '#comeproteggersi_vigasec', 'text' => 'Come proteggersi'],
-    ['href' => '#chisiamo_vigasec', 'text' => 'Chi siamo']
+    ['href' => 'attachi_vigasec', 'text' => 'Attachi'],
+    ['href' => 'comeproteggersi_vigasec', 'text' => 'Come proteggersi'],
+    ['href' => 'chisiamo_vigasec', 'text' => 'Chi siamo']
 ];
 ?>
 <?php layout('components/layout'); ?>
