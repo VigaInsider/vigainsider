@@ -114,8 +114,8 @@
   loop();
 })();
 
-const API_KEY = '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';
-const IS_ANTH = API_KEY.startsWith('sk-ant');
+const KEY = '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';
+const IS_ANTH = KEY.startsWith('sk-ant');
 
 function nav(n) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
@@ -167,7 +167,7 @@ function parseAIJson(text) {
 
 async function analyze() {
   if (!imgB64) { showErr('⚠ Carica prima un\'immagine!'); return; }
-  if (API_KEY.includes('INSERISCI')) { showErr('⚠ Imposta API_KEY nel codice sorgente'); return; }
+  if (KEY.includes('INSERISCI')) { showErr('⚠ Imposta API_KEY nel codice sorgente'); return; }
   setLoad(true); hideErr();
   const p = `Sei esperto di gestione rifiuti. Analizza questa immagine.
 Rispondi SOLO con JSON valido, nessun testo extra:
@@ -177,7 +177,7 @@ Rispondi SOLO con JSON valido, nessun testo extra:
     if (IS_ANTH) {
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01' },
+        headers: { 'Content-Type': 'application/json', 'x-api-key': KEY, 'anthropic-version': '2023-06-01' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514', max_tokens: 700,
           messages: [{ role: 'user', content: [{ type: 'image', source: { type: 'base64', media_type: imgType, data: imgB64 } }, { type: 'text', text: p }] }]
@@ -188,7 +188,7 @@ Rispondi SOLO con JSON valido, nessun testo extra:
     } else {
       const r = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
         body: JSON.stringify({
           model: 'gpt-4o', max_tokens: 700,
           messages: [{ role: 'user', content: [{ type: 'image_url', image_url: { url: `data:${imgType};base64,${imgB64}` } }, { type: 'text', text: p }] }]
