@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art</title>
+    <style>
+        *  {
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Trebuchet MS', sans-serif
+        }
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+        }
+        .box {            
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 2px 2px 5px lightslategray, -2px -2px 5px lightslategray;
+            margin: 20px auto 20px auto;
+            background-color: hsla(40°, 3%, 63%, 0.5);
+        }
+        #menualto {
+            width: fit-content;
+        }
+        #griglia {
+            width: fit-content;
+            display: none;
+        }
+        .inputdim {
+            width: 200px;
+            display: block;
+        }
+        .oth {
+            margin-bottom: 20px;
+        }
+        table, td {
+            border: 1px solid lightgray;
+            border-collapse: collapse;
+        }
+        #menucolore {
+            display: none;
+            width: 400px;
+        }
+        #menubasso {
+            width: 400px;
+            display: none;
+            justify-content: space-between;
+        }
+        #menubasso > button {
+            width: 33%;
+        }
+        .colorRow {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: baseline;
+        }
+        .inputhsl {
+            width: 25%;
+            margin-left: 1%;
+        }
+        .cbox {
+            width: 10%;
+        }
+        .phsl {
+            width: 40%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>PIXEL ART</h1>
+    </div>
+    <div class="box" id="menualto">
+        <input class="inputdim oth" type="number" name="dim" id="dim" placeholder="dimensioni griglia (1-99)" min="1" max="99">
+        <input class="inputdim oth" type="number" name="size" id="size" placeholder="dimensioni cella (1-99 px)" min="1" max="99">
+        <button class="inputdim" onclick="creaGriglia()">Genera griglia</button>
+    </div>
+    <div class="box" id="menucolore">
+        <div class="colorRow">
+            <input class="cbox" type="checkbox" name="hue" id="hue" onchange="selectNotRand()">
+            <p class="phsl">Vincola tinta</p>
+            <input class="inputhsl" type="number" name="minh" id="minh" onchange="checkMaxh()" placeholder="min (0-360)" min="0" max="360">
+            <input class="inputhsl" type="number" name="maxh" id="maxh" onchange="checkMinh()" placeholder="max (0-360)" min="0" max="360">
+        </div>
+        <div class="colorRow">
+            <input class="cbox" type="checkbox" name="sat" id="sat" onchange="selectNotRand()">
+            <p class="phsl">Vincola saturazione</p>
+            <input class="inputhsl" type="number" name="mins" id="mins" onchange="checkMaxs()" placeholder="min (0-100)" min="0" max="100">
+            <input class="inputhsl" type="number" name="maxs" id="maxs" onchange="checkMins()" placeholder="max (0-100)" min="0" max="100">
+        </div>
+        <div class="colorRow">
+            <input class="cbox" type="checkbox" name="lig" id="lig" onchange="selectNotRand()">
+            <p class="phsl">Vincola luminosità</p>
+            <input class="inputhsl" type="number" name="minl" id="minl" onchange="checkMaxl()" placeholder="min (0-100)" min="0" max="100">
+            <input class="inputhsl" type="number" name="maxl" id="maxl" onchange="checkMinl()" placeholder="max (0-100)" min="0" max="100">
+        </div>
+        <div class="colorRow">
+            <input class="cbox" type="checkbox" name="rand" id="rand" onchange="selectRand()" checked>
+            <p class="phsl">Colore casuale</p>
+        </div>
+    </div>
+    <div class="box" id="griglia">
+        select 
+    </div>
+    <div class="box" id="menubasso">
+        <button onclick="blocca()">Blocca</button>
+        <button onclick="replay()">Replay</button>
+        <button onclick="rifai()">Rifai</button>
+    </div>
+
+    <script>
+        var storico=[];
+        function creaGriglia() {
+            let dim=document.getElementById("dim").value;
+            let cellDim=document.getElementById("size").value;
+            if(dim && cellDim) {                
+                let td="<td onmouseover=\"colora(this)\"></td>";
+                let tr="<tr>"+td.repeat(dim)+"</tr>";
+                let table="<table>"+tr.repeat(dim)+"</table>";
+                cellDim+="px";
+                style=document.styleSheets[0];
+                style.insertRule('td {width: '+cellDim+';height:'+cellDim+';',style.cssRules.length);
+                
+                let griglia=document.getElementById("griglia");
+                griglia.innerHTML=table;
+                griglia.style.display="block";
+                document.getElementById("menucolore").style.display="block";
+                document.getElementById("menubasso").style.display="flex";
+                document.getElementById("menualto").style.display="none";
+            }
+        }
+        function selectRand() {
+            if (document.getElementById("rand").checked) {
+                document.getElementById("hue").checked=false;
+                document.getElementById("sat").checked=false;
+                document.getElementById("lig").checked=false;
+            }
+        }
+        function selectNotRand() {
+            if (document.getElementById("hue").checked || document.getElementById("sat").checked || document.getElementById("lig").checked) {
+                document.getElementById("rand").checked=false;
+            }
+        }
+        function checkMaxh() { // on minh change
+            let maxh=document.getElementById("maxh");
+            let minh=document.getElementById("minh");
+            if (minh.value > maxh.value) 
+                maxh.value = minh.value;
+            minh.style.backgroundColor = "hsl("+minh.value+",100%,50%)";
+            maxh.style.backgroundColor = "hsl("+maxh.value+",100%,50%)";
+        }
+        function checkMinh() { // on maxh change
+            let maxh=document.getElementById("maxh");
+            let minh=document.getElementById("minh");
+            if (minh.value > maxh.value) 
+                minh.value = maxh.value;
+            maxh.style.backgroundColor = "hsl("+maxh.value+",100%,50%)";
+            minh.style.backgroundColor = "hsl("+minh.value+",100%,50%)";
+        }
+        function checkMaxs() { // on mins change
+            let maxs=document.getElementById("maxs");
+            let mins=document.getElementById("mins");
+            if (mins.value > maxs.value) 
+                maxs.value = mins.value;
+        }
+        function checkMins() { // on maxs change
+            let maxs=document.getElementById("maxs");
+            let mins=document.getElementById("mins");
+            if (mins.value > maxs.value) 
+                mins.value = maxs.value;
+        }
+        function checkMaxl() { // on minl change
+            let maxl=document.getElementById("maxl");
+            let minl=document.getElementById("minl");
+            if (minl.value > maxl.value) 
+                maxl.value = minl.value;
+        }
+        function checkMinl() { // on maxl change
+            let maxl=document.getElementById("maxl");
+            let minl=document.getElementById("minl");
+            if (minl.value > maxl.value) 
+                minl.value = maxl.value;
+        }
+        function generaColore(minHue,maxHue,minSat,maxSat,minLig,maxLig) {
+            let h=Math.floor(Math.random()*(maxHue-minHue+1))+minHue;
+            let s=Math.floor(Math.random()*(maxSat-minSat+1))+minSat;
+            let l=Math.floor(Math.random()*(maxLig-minLig+1))+minLig;
+            return "hsl("+h+","+s+"%,"+l+"%)";
+        }
+        function colora(el) {
+            let minHue=0;
+            let maxHue=360;
+            let minSat=0;
+            let maxSat=100;
+            let minLig=0;
+            let maxLig=100;
+            if (document.getElementById("hue").checked) {
+                let min=document.getElementById("minh").value;
+                let max=document.getElementById("maxh").value;
+                if (min>=0 && min<=360)
+                    minHue = min;
+                if (max>=0 && max <=360)
+                    maxHue = max;
+            }
+            if (document.getElementById("sat").checked) {
+                let min=document.getElementById("mins").value;
+                let max=document.getElementById("maxs").value;
+                if (min>=0 && min<=100)
+                    minSat = min;
+                if (max>=0 && max <=100)
+                    maxSat = max;
+            }
+            if (document.getElementById("lig").checked) {
+                let min=document.getElementById("minl").value;
+                let max=document.getElementById("maxl").value;
+                if (min>=0 && min<=100)
+                    minLig = min;
+                if (max>=0 && max <=100)
+                    maxLig = max;
+            }
+
+            let colore=generaColore(minHue,maxHue,minSat,maxSat,minLig,maxLig);
+            el.style.backgroundColor = colore;
+            storico.push([el,colore]);
+        }
+        function blocca() {
+            let tds=document.getElementsByTagName("td");
+            for(let i=0;i<tds.length;++i)
+                tds[i].onmouseover="";
+        }
+        function replay() {
+            let tds=document.getElementsByTagName("td");
+            for(let i=0;i<tds.length;++i)
+                tds[i].style.backgroundColor="white";
+            for(let i=0;i<storico.length;++i)
+                setTimeout(() => {storico[i][0].style.backgroundColor = storico[i][1]}, 50*i);
+        }
+        function rifai() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>

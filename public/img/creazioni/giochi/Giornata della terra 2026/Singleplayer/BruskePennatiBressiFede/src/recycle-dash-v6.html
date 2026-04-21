@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Progetto Ecologia: Recycle Dash</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Exo+2:wght@600&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: #1a2e1a;
+            color: white;
+            font-family: 'Exo 2', 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0;
+            gap: 10px;
+        }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(16px, 3.5vw, 26px);
+            letter-spacing: 4px;
+            color: #2ecc71;
+            text-shadow: 0 0 18px rgba(46,204,113,0.5);
+            margin: 0;
+        }
+        .stats {
+            display: flex;
+            gap: 28px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #aaa;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(46,204,113,0.2);
+            border-radius: 40px;
+            padding: 7px 26px;
+            margin-bottom: 0;
+            letter-spacing: 1px;
+        }
+        .stats span { color: #2ecc71; font-family: 'Orbitron', sans-serif; font-size: 15px; }
+        .stats .hl  { color: #f1c40f; }
+        .stats .red { color: #e74c3c; }
+        .canvas-wrap {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 3px rgba(46,204,113,0.45),
+                0 0 32px rgba(46,204,113,0.15),
+                0 16px 48px rgba(0,0,0,0.7);
+        }
+        canvas {
+            display: block;
+            background: #000;
+            max-width: 95vw;
+            max-height: calc(100vh - 140px);
+        }
+        #restartBtn {
+            display: none;
+            margin-top: 16px;
+            padding: 11px 34px;
+            background: linear-gradient(135deg, #27ae60, #1abc9c);
+            color: #0a0e1a;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(46,204,113,0.4);
+            transition: transform .15s, box-shadow .15s;
+        }
+        #restartBtn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 30px rgba(46,204,113,0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>♻ Recycle Dash</h1>
+
+    <div class="stats">
+        ♻️ Rifiuti: <span id="score">0</span>
+        &nbsp;|&nbsp;
+        🏆 Record: <span class="hl" id="highScore">0</span>
+        &nbsp;|&nbsp;
+        ❤️ Vite: <span class="red" id="lives">3</span>
+    </div>
+
+    <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="1200" height="600"></canvas>
+    </div>
+
+    <button id="restartBtn" onclick="restartGame()">▶ Gioca di nuovo</button>
+
+<script>
+const CONFIG = {
+    gravity: 0.75,
+    jumpForce: -18,  // ✅ AUMENTATO DEL 50% (era -12)
+    groundY: 550,
+    playerX: 50,
+    initialSpeed: 6
+};
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// ✅ Aggiungi roundRect al prototype di Canvas
+CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.moveTo(x + r, y);
+    this.lineTo(x + w - r, y);
+    this.quadraticCurveTo(x + w, y, x + w, y + r);
+    this.lineTo(x + w, y + h - r);
+    this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    this.lineTo(x + r, y + h);
+    this.quadraticCurveTo(x, y + h, x, y + h - r);
+    this.lineTo(x, y + r);
+    this.quadraticCurveTo(x, y, x + r, y);
+    return this;
+};
+
+function loadImage(src) {
+    const img = new Image();
+    img.src = src;
+    img.loaded = false;
+    img.addEventListener('load', () => { img.loaded = true; });
+    img.addEventListener('error', () => { img.loaded = false; });
+    return img;
+}
+
+const IMAGES = {
+    player:   loadImage('bin2.png'),
+    obstacle: loadImage('ostacolo.png')
+};
+
+const TRASH_TYPES = [
+    { emoji:'🍶', label:'Bottiglia', color:'#4dd0e1' },
+    { emoji:'📰', label:'Cartaccia', color:'#fff176' },
+    { emoji:'🥫', label:'Lattina',   color:'#ef9a9a' },
+    { emoji:'🥤', label:'Bicchiere', color:'#80cbc4' },
+    { emoji:'🧴', label:'Flacone',   color:'#ce93d8' },
+    { emoji:'📦', label:'Scatola',   color:'#ffcc80' },
+    { emoji:'🍌', label:'Buccia',    color:'#fff59d' },
+    { emoji:'🪣', label:'Secchio',   color:'#90caf9' },
+];
+
+const CLOUDS = [
+    { x: 120,  y: 55,  w: 130, h: 45, speed: 0.4 },
+    { x: 380,  y: 35,  w: 100, h: 35, speed: 0.25 },
+    { x: 650,  y: 70,  w: 160, h: 50, speed: 0.35 },
+    { x: 900,  y: 45,  w: 120, h: 38, speed: 0.3  },
+    { x: 1100, y: 80,  w: 90,  h: 30, speed: 0.45 },
+];
+
+const TREES_BG = [60,180,310,480,620,760,920,1050,1150].map(x => ({ x, scale: 0.55 + Math.random()*0.2 }));
+const TREES_FG = [30,150,290,440,570,720,860,1010,1110,1185].map(x => ({ x, scale: 0.85 + Math.random()*0.3 }));
+
+const BUILDINGS = [
+    { x: 200,  w: 60,  h: 160, color: '#8fa3b8' },
+    { x: 270,  w: 45,  h: 120, color: '#a0b4c8' },
+    { x: 500,  w: 80,  h: 200, color: '#7a94aa' },
+    { x: 590,  w: 55,  h: 140, color: '#92a8bc' },
+    { x: 780,  w: 70,  h: 180, color: '#849db2' },
+    { x: 860,  w: 50,  h: 110, color: '#9db0c2' },
+    { x: 1020, w: 65,  h: 155, color: '#8097ac' },
+];
+
+let tick = 0;
+let gameStarted = false;
+
+// ✅ Handler per il click iniziale
+function handleCanvasClick(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const clickX = (e.clientX - rect.left) * scaleX;
+    const clickY = (e.clientY - rect.top) * scaleY;
+    
+    const pw = 680, ph = 430;
+    const px = canvas.width / 2 - pw / 2;
+    const py = canvas.height / 2 - ph / 2;
+    const bw = 270, bh = 50;
+    const bx = canvas.width / 2 - bw / 2;
+    const by = py + ph - 72;
+    
+    if (clickX >= bx && clickX <= bx + bw && 
+        clickY >= by && clickY <= by + bh) {
+        startGame();
+    }
+}
+
+function startGame() {
+    gameStarted = true;
+    gameActive = true;
+    canvas.removeEventListener('click', handleCanvasClick);
+    canvas.addEventListener('click', handleJumpClick);
+    gameLoop();
+}
+
+function handleJumpClick(e) {
+    if (gameActive) player.jump();
+}
+
+function drawSky() {
+    tick += 0.016;
+
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, CONFIG.groundY);
+    skyGrad.addColorStop(0,   '#4fc3f7');
+    skyGrad.addColorStop(0.5, '#81d4fa');
+    skyGrad.addColorStop(1,   '#b3e5fc');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, canvas.width, CONFIG.groundY);
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(255,220,50,0.6)';
+    ctx.shadowBlur = 40;
+    ctx.fillStyle = '#ffe066';
+    ctx.beginPath();
+    ctx.arc(80, 70, 42, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff176';
+    ctx.beginPath();
+    ctx.arc(80, 70, 30, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    CLOUDS.forEach(c => {
+        c.x -= c.speed;
+        if (c.x + c.w + 60 < 0) c.x = canvas.width + c.w + 60;
+        drawCloud(c.x, c.y, c.w * 0.38);
+    });
+
+    BUILDINGS.forEach(b => drawBuilding(b));
+    TREES_BG.forEach(t => drawTree(t.x, CONFIG.groundY, t.scale * 0.72));
+
+    const groundGrad = ctx.createLinearGradient(0, CONFIG.groundY, 0, canvas.height);
+    groundGrad.addColorStop(0, '#4caf50');
+    groundGrad.addColorStop(0.3, '#388e3c');
+    groundGrad.addColorStop(1,   '#2e7d32');
+    ctx.fillStyle = groundGrad;
+    ctx.fillRect(0, CONFIG.groundY, canvas.width, canvas.height - CONFIG.groundY);
+
+    ctx.fillStyle = '#78909c';
+    ctx.fillRect(0, CONFIG.groundY + 6, canvas.width, 20);
+    ctx.fillStyle = '#90a4ae';
+    ctx.fillRect(0, CONFIG.groundY + 6, canvas.width, 4);
+
+    ctx.setLineDash([36, 24]);
+    ctx.lineDashOffset = -(frameCount * CONFIG.initialSpeed * 0.55) % 60;
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, CONFIG.groundY + 17);
+    ctx.lineTo(canvas.width, CONFIG.groundY + 17);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    TREES_FG.forEach(t => drawTree(t.x, CONFIG.groundY + 3, t.scale * 0.5));
+}
+
+function drawCloud(cx, cy, r) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.shadowColor = 'rgba(255,255,255,0.4)';
+    ctx.shadowBlur = 8;
+    const blobs = [
+        [0,    0,    r],
+        [-r*0.7, r*0.2, r*0.75],
+        [ r*0.7, r*0.2, r*0.75],
+        [-r*0.35,-r*0.3, r*0.65],
+        [ r*0.35,-r*0.3, r*0.65],
+    ];
+    blobs.forEach(([dx, dy, br]) => {
+        ctx.beginPath();
+        ctx.arc(cx + dx, cy + dy, br, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    ctx.restore();
+}
+
+function drawTree(x, baseY, scale) {
+    ctx.save();
+    const h = 110 * scale;
+    const w = 50 * scale;
+    const trunkH = 22 * scale;
+    const trunkW = 10 * scale;
+
+    ctx.fillStyle = '#6b3f1f';
+    ctx.fillRect(x - trunkW/2, baseY - trunkH, trunkW, trunkH + 2);
+
+    const greens = ['#2d7a2d','#37963a','#44b347'];
+    for (let i = 0; i < 3; i++) {
+        const ly = baseY - trunkH - (h * 0.35 * i);
+        const lw = w * (1 - i * 0.22);
+        const lh = h * 0.48;
+        ctx.fillStyle = greens[i];
+        ctx.beginPath();
+        ctx.moveTo(x, ly - lh);
+        ctx.lineTo(x + lw/2, ly);
+        ctx.lineTo(x - lw/2, ly);
+        ctx.closePath();
+        ctx.fill();
+    }
+    ctx.restore();
+}
+
+function drawBuilding(b) {
+    const groundY = CONFIG.groundY;
+    const bx = b.x, by = groundY - b.h;
+
+    ctx.fillStyle = b.color;
+    ctx.fillRect(bx, by, b.w, b.h);
+
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
+    ctx.fillRect(bx + b.w * 0.75, by, b.w * 0.25, b.h);
+
+    ctx.fillStyle = shadeColor(b.color, -20);
+    ctx.fillRect(bx, by, b.w, 8);
+
+    const cols = Math.floor(b.w / 18);
+    const rows = Math.floor(b.h / 28);
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const wx = bx + 6 + c * 18;
+            const wy = by + 16 + r * 28;
+            if (wx + 10 > bx + b.w - 4) continue;
+            const lit = (r + c) % 3 !== 0;
+            ctx.fillStyle = lit ? 'rgba(255,240,180,0.7)' : 'rgba(100,130,160,0.4)';
+            ctx.fillRect(wx, wy, 10, 14);
+        }
+    }
+}
+
+function shadeColor(hex, amt) {
+    const n = parseInt(hex.slice(1), 16);
+    const r = Math.max(0, Math.min(255, (n >> 16) + amt));
+    const g = Math.max(0, Math.min(255, ((n >> 8) & 0xff) + amt));
+    const b = Math.max(0, Math.min(255, (n & 0xff) + amt));
+    return `rgb(${r},${g},${b})`;
+}
+
+// ✅ PLAYER CON SALTO PIÙ ALTO DEL 50%
+class Player {
+    constructor() {
+        this.x = CONFIG.playerX;
+        this.y = CONFIG.groundY - 75;  // altezza aumentata
+        this.width = 75;   // era 50
+        this.height = 75;  // era 50
+        this.vy = 0;
+        this.isJumping = false;
+        this.lives = 3;
+    }
+
+    jump() {
+        if (!this.isJumping) {
+            this.vy = CONFIG.jumpForce;  // ✅ Ora -18 invece di -12
+            this.isJumping = true;
+        }
+    }
+
+    update() {
+        this.vy += CONFIG.gravity;
+        this.y  += this.vy;
+        if (this.y > CONFIG.groundY - this.height) {
+            this.y = CONFIG.groundY - this.height;
+            this.vy = 0;
+            this.isJumping = false;
+        }
+    }
+
+    draw() {
+        if (IMAGES.player.loaded) {
+            ctx.drawImage(IMAGES.player, this.x, this.y, this.width, this.height);
+            return;
+        }
+        ctx.save();
+        ctx.shadowColor = '#2ecc71';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#27ae60';
+        ctx.beginPath();
+        ctx.roundRect(this.x, this.y + 12, this.width, this.height - 12, 8);
+        ctx.fill();
+        ctx.fillStyle = '#1a7a43';
+        ctx.beginPath();
+        ctx.roundRect(this.x - 4, this.y, this.width + 8, 15, 6);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo(this.x + 12 + i * 20, this.y + 20);
+            ctx.lineTo(this.x + 12 + i * 20, this.y + this.height - 6);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+}
+
+// ✅ ENTITY CON DIMENSIONI AUMENTATE DEL 50%
+class Entity {
+    constructor(x, y, width, height, speed, kind, opts = {}) {
+        this.x = x; this.y = y;
+        this.width = width; 
+        this.height = height;
+        this.speed = speed; 
+        this.kind = kind;
+        this.image = opts.image || null;
+        this.trashType = opts.trashType || null;
+    }
+
+    update() { this.x -= this.speed; }
+
+    draw() {
+        if (this.kind === 'obstacle') {
+            if (this.image?.loaded) {
+                ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                return;
+            }
+            ctx.fillStyle = "#e74c3c";
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+            return;
+        }
+
+        const t = this.trashType || TRASH_TYPES[0];
+        const cx = this.x + this.width / 2;
+        const cy = this.y + this.height / 2;
+
+        ctx.save();
+        ctx.shadowColor = t.color;
+        ctx.shadowBlur = 24;
+
+        // Cerchio sfondo
+        ctx.beginPath();
+        ctx.arc(cx, cy, this.width / 2 + 12, 0, Math.PI * 2);
+        ctx.fillStyle = t.color + '30';
+        ctx.fill();
+
+        // Cerchio bordo
+        ctx.beginPath();
+        ctx.arc(cx, cy, this.width / 2 + 3, 0, Math.PI * 2);
+        ctx.strokeStyle = t.color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Emoji grande
+        ctx.font = `${Math.floor(this.height * 0.8)}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'white';
+        ctx.fillText(t.emoji, cx, cy + 3);
+
+        // Etichetta
+        ctx.shadowBlur = 0;
+        ctx.font = `bold 16px "Exo 2", sans-serif`;
+        ctx.fillStyle = t.color;
+        ctx.fillText(t.label, cx, cy + this.height / 2 + 20);
+
+        ctx.restore();
+    }
+}
+
+let player = new Player();
+let entities = [];
+let score = 0;
+let gameActive = false;
+let frameCount = 0;
+let trashSpawnCount = 0;
+let speedMultiplier = 1;
+let highScore = 0;
+let newRecord = false;
+
+function gameLoop() {
+    if (!gameActive) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawSky();
+    player.update();
+    player.draw();
+
+    speedMultiplier += 0.0005;
+
+    if (frameCount % 60 === 0) {
+        const type = Math.random() > 0.5 ? 'trash' : 'obstacle';
+        if (type === 'trash') {
+            const trashType = TRASH_TYPES[trashSpawnCount % TRASH_TYPES.length];
+            trashSpawnCount++;
+            entities.push(new Entity(
+                canvas.width, CONFIG.groundY - 84, 78, 78,  // ✅ 52*1.5 = 78
+                CONFIG.initialSpeed * speedMultiplier, 'trash', { trashType }
+            ));
+        } else {
+            entities.push(new Entity(
+                canvas.width, CONFIG.groundY - 105, 75, 105,  // ✅ 50x70 → 75x105
+                CONFIG.initialSpeed * speedMultiplier, 'obstacle', { image: IMAGES.obstacle }
+            ));
+        }
+    }
+
+    entities.forEach((entity, index) => {
+        entity.update();
+        entity.draw();
+
+        if (player.x < entity.x + entity.width &&
+            player.x + player.width > entity.x &&
+            player.y < entity.y + entity.height &&
+            player.y + player.height > entity.y) {
+
+            if (entity.kind === 'trash') {
+                score++;
+                document.getElementById('score').innerText = score;
+                if (score > highScore) {
+                    newRecord = true;
+                    highScore = score;
+                    document.getElementById('highScore').innerText = highScore;
+                }
+                entities.splice(index, 1);
+            } else {
+                player.lives--;
+                document.getElementById('lives').innerText = player.lives;
+                entities.splice(index, 1);
+                if (player.lives <= 0) gameOver();
+            }
+        }
+
+        if (entity.x + entity.width < 0) entities.splice(index, 1);
+    });
+
+    frameCount++;
+    requestAnimationFrame(gameLoop);
+}
+
+function gameOver() {
+    gameActive = false;
+    document.getElementById('restartBtn').style.display = 'inline-block';
+
+    ctx.fillStyle = "rgba(0,0,0,0.72)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const pw = 480, ph = 200;
+    const px = canvas.width / 2 - pw / 2, py = canvas.height / 2 - ph / 2;
+    ctx.save();
+    ctx.shadowColor = newRecord ? '#f1c40f' : '#e74c3c';
+    ctx.shadowBlur = 30;
+    ctx.fillStyle = newRecord ? '#120f00' : '#130000';
+    ctx.beginPath();
+    ctx.roundRect(px, py, pw, ph, 14);
+    ctx.fill();
+    ctx.strokeStyle = newRecord ? '#f1c40f' : '#e74c3c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+    if (newRecord) {
+        ctx.fillStyle = '#f1c40f';
+        ctx.font = 'bold 30px Arial';
+        ctx.fillText('🏆 NUOVO RECORD!', canvas.width / 2, py + 60);
+    } else {
+        ctx.fillStyle = '#e74c3c';
+        ctx.font = 'bold 30px Arial';
+        ctx.fillText('MISSIONE FALLITA', canvas.width / 2, py + 60);
+    }
+    ctx.fillStyle = 'white';
+    ctx.font = '20px Arial';
+    ctx.fillText('Hai raccolto ' + score + ' rifiuti.', canvas.width / 2, py + 105);
+    ctx.fillStyle = '#aaa';
+    ctx.font = '17px Arial';
+    ctx.fillText('Record: ' + highScore, canvas.width / 2, py + 140);
+}
+
+function restartGame() {
+    player = new Player();
+    entities = [];
+    score = 0; gameActive = true;
+    frameCount = 0; trashSpawnCount = 0;
+    speedMultiplier = 1; newRecord = false;
+    document.getElementById('score').innerText = 0;
+    document.getElementById('lives').innerText = 3;
+    document.getElementById('restartBtn').style.display = 'none';
+    gameLoop();
+}
+
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        if (!gameStarted) { startGame(); return; }
+        player.jump();
+    }
+});
+
+function drawStartScreen() {
+    drawSky();
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const pw = 680, ph = 430;
+    const px = canvas.width / 2 - pw / 2;
+    const py = canvas.height / 2 - ph / 2;
+
+    ctx.save();
+    ctx.shadowColor = '#2ecc71';
+    ctx.shadowBlur = 40;
+    ctx.fillStyle = 'rgba(8,22,12,0.94)';
+    ctx.beginPath();
+    ctx.roundRect(px, py, pw, ph, 18);
+    ctx.fill();
+    ctx.strokeStyle = '#2ecc71';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#2ecc71';
+    ctx.font = 'bold 30px Orbitron, Arial';
+    ctx.fillText('♻ COME SI GIOCA', canvas.width / 2, py + 50);
+
+    ctx.strokeStyle = 'rgba(46,204,113,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px + 40, py + 66);
+    ctx.lineTo(px + pw - 40, py + 66);
+    ctx.stroke();
+
+    const regole = [
+        { icon: '⬆️  SPAZIO',    testo: 'per saltare ed evitare gli ostacoli' },
+        { icon: '♻️  Rifiuti',   testo: 'raccoglili per fare punti' },
+        { icon: '⚠️  Ostacoli',  testo: 'evitali! ogni colpo ti costa una vita' },
+        { icon: '❤️  Vite',      testo: 'hai 3 vite — finiscono? game over!' },
+        { icon: '🚀  Velocità',  testo: "il gioco accelera col tempo, stai all'erta!" },
+    ];
+
+    ctx.textAlign = 'left';
+    regole.forEach((r, i) => {
+        const ry = py + 108 + i * 48;
+        ctx.fillStyle = '#2ecc71';
+        ctx.font = 'bold 15px "Exo 2", sans-serif';
+        ctx.fillText(r.icon, px + 52, ry);
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.font = '15px "Exo 2", sans-serif';
+        ctx.fillText('→  ' + r.testo, px + 195, ry);
+    });
+
+    ctx.strokeStyle = 'rgba(46,204,113,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px + 40, py + ph - 88);
+    ctx.lineTo(px + pw - 40, py + ph - 88);
+    ctx.stroke();
+
+    const bw = 270, bh = 50;
+    const bx = canvas.width / 2 - bw / 2;
+    const by = py + ph - 72;
+
+    ctx.save();
+    ctx.shadowColor = '#2ecc71';
+    ctx.shadowBlur = 22;
+    const bg = ctx.createLinearGradient(bx, by, bx + bw, by);
+    bg.addColorStop(0, '#27ae60');
+    bg.addColorStop(1, '#1abc9c');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.roundRect(bx, by, bw, bh, 30);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#051a0a';
+    ctx.font = 'bold 17px Orbitron, Arial';
+    ctx.fillText('▶  INIZIA A GIOCARE', canvas.width / 2, by + 33);
+}
+
+// Inizializzazione
+document.getElementById('score').innerText = 0;
+document.getElementById('highScore').innerText = 0;
+document.getElementById('lives').innerText = 3;
+drawStartScreen();
+canvas.addEventListener('click', handleCanvasClick);
+</script>
+</body>
+</html>

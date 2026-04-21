@@ -1,0 +1,194 @@
+/* --- VARIABILI GLOBALI --- */
+:root {
+    --green-bright: #2ecc71;
+    --green-glow: rgba(46, 204, 113, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(46, 204, 113, 0.2);
+    --top: 10px;
+    --text-base: 1.1rem;
+}
+
+/* --- RESET E BASE --- */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000; /* Sfondo di sicurezza */
+}
+
+/* --- SCHERMATA FASE 2 --- */
+#start-fase2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+    color: white;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Sfondo Sfumato Base */
+    background: radial-gradient(circle at center, #0a2f1a 0%, #000000 100%);
+    transition: opacity 0.5s ease;
+}
+
+/* Overlay per dare texture allo sfondo */
+.overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(46, 204, 113, 0.05) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* --- CONTENUTO --- */
+.content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* Sezione Titolo (50% sopra) */
+.top-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.top-section h1 {
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: var(--green-bright);
+    text-shadow: 0 0 20px var(--green-glow);
+    margin: 0;
+    padding: 20px;
+}
+
+/* Sezione Box (50% sotto) */
+.bottom-section {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: flex-start;
+    padding-top: 20px;
+}
+
+.item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 20px;
+}
+
+/* --- BOX STILIZZATI (Glassmorphism) --- */
+.controls-box, .instructions-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-top: 4px solid var(--green-bright);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 350px;
+    min-height: 200px;
+    text-align: center;
+}
+
+.controls-box h3, .instructions-box h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    letter-spacing: 1px;
+}
+
+.controls-box p, .instructions-box p {
+    font-size: var(--text-base);
+    line-height: 1.6;
+    margin: 10px 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* --- ELEMENTI SPECIALI --- */
+kbd {
+    background: #222;
+    color: var(--green-bright);
+    border: 1px solid var(--green-bright);
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    box-shadow: 0 0 5px var(--green-glow);
+}
+
+b, i {
+    color: var(--green-bright);
+    font-style: normal;
+}
+
+/* --- PULSANTE CENTRALE --- */
+.item.center {
+    align-items: center; /* Il pulsante centrale lo vogliamo a metà altezza */
+    height: 50%; 
+}
+
+.pulse-text {
+    display: inline-block;
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+    border: 2px solid var(--green-bright);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: pulse 2s infinite;
+    background: rgba(46, 204, 113, 0.1);
+}
+
+.pulse-text:hover {
+    background: var(--green-bright);
+    color: black;
+    box-shadow: 0 0 30px var(--green-glow);
+    transform: scale(1.1);
+    animation-play-state: paused; /* Si ferma quando ci passi sopra */
+}
+
+/* --- ANIMAZIONI --- */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+    50% { transform: scale(1.05); opacity: 0.7; box-shadow: 0 0 20px 10px rgba(46, 204, 113, 0); }
+    100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+/* --- RESPONSIVE VELOCE --- */
+@media (max-width: 900px) {
+    .bottom-section {
+        flex-direction: column;
+        align-items: center;
+    }
+    .item {
+        margin-bottom: 20px;
+        width: 80%;
+    }
+    .top-section h1 {
+        font-size: 2rem;
+    }
+}

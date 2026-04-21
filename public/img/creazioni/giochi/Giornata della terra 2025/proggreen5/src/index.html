@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto</title>
+    <style>
+        button {
+            margin-left: 620px;
+            margin-top: 15px;
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #72909b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        strong {
+            margin-left: 650px;
+            color: white;
+        }
+
+        p {
+            margin-left: 650px;
+            margin-top: 5px;
+        }
+
+        #div2 {
+            margin-left: 380px;
+            background-color: beige;
+            border: 5px solid black;
+            width: 600px;
+            height: 400px;
+            position: relative;
+        }
+
+        body {
+            background-color: #A1E3D8;
+        }
+
+        h1 {
+            color: white;
+            font-size: 20px;
+            margin-left: 600px;
+            margin-top: -200px;
+        }
+
+        #c,
+        #a,#t {
+            margin-top: 0%;
+            margin-left: 0%;
+            color: white;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <p id="a">Aura: </p>
+    <p id="c">💴: </p>
+    <p id = "t">timer: </p>
+    <h1>Prendi il Rifiuto</h1>
+    <div id="div2"></div>
+    <button id="bottone1" onclick="iniziaGioco()">Inizia a giocare</button>
+    <p></p>
+    <strong>Rifiuti Presi</strong>
+    <p id="par">0</p>
+    <p></p>
+    <strong>Record</strong>
+    <p id="rec">0</p>
+
+    <script>
+        let Aura = document.getElementById("a");
+        let sol = document.getElementById("c");
+        let gioca = document.getElementById("bottone1");
+        let div2 = document.getElementById("div2");
+        let p = document.getElementById("par");
+        let r = document.getElementById("rec");
+        let t = document.getElementById("t")
+
+        let giocoAttivo = false;
+        let idInterval;
+        let conta = 0;
+        let aura = 0;
+        let monete = 0;
+        let record = 0;
+        let tempo=30
+
+        gioca.addEventListener("click", iniziaGioco);
+
+        function iniziaGioco() {
+            giocoAttivo = true;
+            conta = 0;
+            aura = 0;
+            monete = 0;
+            p.innerHTML = conta;
+            Aura.innerHTML = "Aura: " + aura;
+            sol.innerHTML = "💴: " + monete;
+
+            clearInterval(idInterval);
+            idInterval = setInterval(generaImmagine, 1000);
+
+            setTimeout(terminaGioco, 20000);
+        }
+let aum =5
+        function generaImmagine() {
+            if (!giocoAttivo) return;
+
+            let nuovaImmagine = document.createElement("img");
+            nuovaImmagine.src = "rif.png";
+            nuovaImmagine.style.height = "40px";
+            nuovaImmagine.style.width = "40px";
+            nuovaImmagine.style.position = "absolute";
+
+            let x = Math.floor(Math.random() * 565);
+            let y = Math.floor(Math.random() *360 );
+            nuovaImmagine.style.left = x + "px";
+            nuovaImmagine.style.top = y + "px";
+
+            div2.appendChild(nuovaImmagine);
+            tempo--;
+            t.innerHTML="" +tempo
+
+            nuovaImmagine.addEventListener("click", function() {
+                if (!giocoAttivo) return;
+                conta++;
+                monete += 2;
+                 aum = aum+5
+                aura = aum;
+                p.innerHTML = conta;
+                Aura.innerHTML = "Aura: " + aura + "⭐";
+                sol.innerHTML = "💴: " + monete;
+                nuovaImmagine.remove();
+            });
+        }
+
+        function terminaGioco() {
+            giocoAttivo = false;
+            clearInterval(idInterval);
+            div2.innerHTML = " "
+            record = Math.max(record, conta);
+            aggiornaRecordDisplay();
+
+            alert("Fine partita! Il tuo record è: " + record);
+        }
+
+        function aggiornaRecordDisplay() {
+            if (record <= 10) {
+                r.innerHTML = record + " 👎";
+            } else if (record <= 20) {
+                r.innerHTML = record + " 👍";
+            } else if (record <= 40) {
+                r.innerHTML = record + " 💣";
+            } else {
+                r.innerHTML = record + " 🔥";
+            }
+        }
+    </script>
+</body>
+</html>

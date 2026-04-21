@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livello Plastica</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-image: url(tree.webp);
+            padding: 20px; 
+            color: black;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .area-gioco { 
+            position: relative; 
+            height: 400px; 
+            background-size: cover;
+            margin: 20px auto; 
+            width: 80%; 
+            border-radius: 15px; 
+            border: 5px solid grey;
+            overflow: hidden;
+            background-color: white;
+        }
+        .bottiglia {
+            width: 60px; 
+            height: 60px; 
+            position: absolute; 
+            cursor: pointer; 
+            background: url('bottiglia.avif') no-repeat center center; 
+            background-size: cover; 
+            transition: transform 0.3s ease;
+        }
+        .bottiglia:hover {
+            transform: scale(1.2);
+        }
+        .punteggio {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .bottoni {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #1e88e5;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Colpisci la plastica!</h1>
+    <div class="area-gioco" id="gioco-plastica"></div>
+    <div class="punteggio" id="tabellone-punteggio">Punteggio: 0</div>
+    <div class="bottoni">
+        <button onclick="avviaGiocoPlastica()">Inizia</button>
+        <button onclick="tornaHome()">Home</button>
+    </div>
+
+    <script>
+        function avviaGiocoPlastica() {
+            let areaGioco = document.getElementById("gioco-plastica");
+            let tabellonePunteggio = document.getElementById("tabellone-punteggio");
+            let punteggio = 0;
+            let tempoRimanente = 15;
+
+            areaGioco.innerHTML = "";
+            tabellonePunteggio.innerHTML = `Tempo: ${tempoRimanente}s | Punteggio: 0`;
+            
+            let timer = setInterval(() => {
+                if (tempoRimanente > 0) {
+                    tempoRimanente--;
+                    tabellonePunteggio.innerHTML = `Tempo: ${tempoRimanente}s | Punteggio: ${punteggio}`;
+                } else {
+                    clearInterval(timer);
+                    clearInterval(intervalGenerazione);
+                    alert(`Gioco finito! Hai colpito ${punteggio} oggetti di plastica.`);
+                }
+            }, 1000);
+
+            function generaBottiglia() {
+                let bottiglia = document.createElement("div");
+                bottiglia.classList.add("bottiglia");
+                bottiglia.style.left = Math.random() * 80 + "%";
+                bottiglia.style.top = Math.random() * 80 + "%";
+                
+                bottiglia.onclick = function () {
+                    punteggio++;
+                    tabellonePunteggio.innerHTML = `Tempo: ${tempoRimanente}s | Punteggio: ${punteggio}`;
+                    bottiglia.remove();
+                };
+                
+                areaGioco.appendChild(bottiglia);
+
+                setTimeout(() => {
+                    if (bottiglia) bottiglia.remove();
+                }, 2000);
+            }
+
+            let intervalGenerazione = setInterval(generaBottiglia, 1000);
+        }
+
+        function tornaHome() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

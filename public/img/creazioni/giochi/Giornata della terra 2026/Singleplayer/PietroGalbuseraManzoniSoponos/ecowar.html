@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Eco-Warrior: Extreme Edition 🌍</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+    :root{
+      --neon-green:#22c55e;
+      --neon-blue:#3b82f6;
+      --neon-red:#ef4444;
+      --neon-purple:#a855f7;
+      --neon-gold:#facc15;
+      --bg-dark:#020617;
+    }
+
+    body{
+      margin:0;
+      background:var(--bg-dark);
+      color:white;
+      font-family:'Orbitron', sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      overflow:hidden;
+    }
+
+    /* --- EPIC VICTORY UI --- */
+    #victory-screen{
+      position:absolute; inset:0;
+      background:rgba(0,0,0,0.85);
+      z-index:5000;
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.8s forwards;
+    }
+
+    .victory-banner{
+      background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.9), transparent);
+      width:100%;
+      text-align:center;
+      padding:30px 0;
+      transform: skewY(-6deg);
+      box-shadow: 0 0 60px var(--neon-gold);
+      animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .victory-text{
+      font-size: clamp(44px, 6vw, 80px);
+      color:white;
+      text-transform:uppercase;
+      text-shadow: 4px 4px 0px #b45309, 0 0 40px var(--neon-gold);
+      margin:0;
+      letter-spacing: .06em;
+    }
+
+    @keyframes bounceIn{
+      from { transform: scale(0) skewY(-6deg); }
+      to { transform: scale(1) skewY(-6deg); }
+    }
+    @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+
+    /* --- GIOCO --- */
+    .container{ display:flex; gap:20px; transition:.5s; padding: 18px; }
+
+    #scanner{
+      width:300px;
+      background: rgba(0, 0, 0, 0.9);
+      border:2px solid var(--main);
+      border-radius:15px;
+      padding:20px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .section-header{
+      font-size:12px;
+      color:#94a3b8;
+      margin:15px 0 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 6px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .item-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:5px;
+      padding:5px 8px;
+      border-radius:8px;
+      font-size:14px;
+      line-height: 1.1;
+    }
+    .item-row span{ font-size: 18px; width: 24px; text-align:center; }
+
+    .catch{ border-left:3px solid var(--neon-green); background: rgba(34, 197, 94, 0.1); }
+    .avoid{ border-left:3px solid var(--neon-red); background: rgba(239, 68, 68, 0.1); }
+    .utility{ border-left:3px solid var(--neon-blue); background: rgba(59, 130, 246, 0.1); }
+
+    #gioco{
+      position:relative;
+      width:750px;
+      height:500px;
+      background: var(--bg-game);
+      border: 4px solid var(--main);
+      border-radius:20px;
+      overflow:hidden;
+      cursor:none;
+    }
+
+    #cestino{
+      position:absolute;
+      bottom:20px;
+      font-size:60px;
+      z-index:10;
+      transition: transform 0.2s;
+      will-change: left, transform;
+    }
+
+    .oggetto{
+      position:absolute;
+      font-size:45px;
+      z-index:5;
+      user-select:none;
+      pointer-events:none;
+      will-change: transform, top, left;
+    }
+
+    /* BIOMI AMBIENTALI */
+    .biome-0 { --main:#0ea5e9; --bg-game:#0c4a6e; } /* Oceano */
+    .biome-1 { --main:#94a3b8; --bg-game:#1e293b; } /* Aria */
+    .biome-2 { --main:#fbbf24; --bg-game:#451a03; } /* Terra */
+    .biome-3 { --main:#22c55e; --bg-game:#064e3b; } /* Restauro */
+
+    .glow-help{ filter: drop-shadow(0 0 20px var(--neon-blue)); }
+    .glow-harm{ filter: drop-shadow(0 0 20px var(--neon-red)); animation: shake 0.3s infinite; }
+
+    @keyframes shake{
+      0%{ transform: rotate(-5deg); }
+      50%{ transform: rotate(5deg); }
+      100%{ transform: rotate(-5deg); }
+    }
+
+    /* responsive */
+    @media (max-width: 1100px){
+      body{ height:auto; min-height:100vh; }
+      .container{ flex-direction:column; align-items:center; }
+      #gioco{ width:min(92vw, 750px); height: min(62vh, 500px); }
+      #scanner{ width: min(92vw, 360px); }
+    }
+  </style>
+</head>
+<body class="biome-0">
+
+  <!-- SCHERMATA VITTORIA EPIC -->
+  <div id="victory-screen" role="dialog" aria-modal="true" aria-label="Schermata di vittoria">
+    <div class="victory-banner">
+      <h1 class="victory-text">EPIC VICTORY ROYALE</h1>
+    </div>
+    <p style="font-size: 20px; color: var(--neon-gold); margin-top: 20px; font-family:'Rajdhani', sans-serif; letter-spacing:.08em;">
+      IL PIANETA È FINALMENTE AL SICURO
+    </p>
+    <button onclick="location.reload()"
+      style="margin-top:30px; padding:15px 40px; font-family:'Orbitron'; cursor:pointer; background:white; border:none; font-weight:900; border-radius:50px;">
+      NUOVA PARTITA
+    </button>
+  </div>
+
+  <div class="container" id="game-container">
+    <!-- INDICE DINAMICO -->
+    <aside id="scanner" aria-label="Scanner informazioni">
+      <h3 id="biome-name" style="color: var(--main); margin:0;">SCANNING...</h3>
+
+      <div class="section-header">DATA CATCH (PRENDI)</div>
+      <div id="list-catch"></div>
+
+      <div class="section-header">DATA AVOID (SCHIVA)</div>
+      <div id="list-avoid">
+        <div class="item-row avoid"><span>☢️</span> <b>SCORIA</b></div>
+        <div class="item-row avoid"><span>🌧️</span> <b>PIOGGIA</b></div>
+        <div class="item-row avoid"><span>🦠</span> <b>VIRUS</b></div>
+      </div>
+
+      <div class="section-header">UTILITY</div>
+      <div class="item-row utility"><span>🔧</span> <b>KIT REPAIR</b></div>
+      <div class="item-row utility"><span>⏳</span> <b>CLESSIDRA (SLOW)</b></div>
+
+      <div style="margin-top:20px; font-size: 14px; font-family:'Rajdhani', sans-serif;">
+        PROGRESS: <span id="punti-ui" style="color:var(--neon-green)">0</span> / 100
+      </div>
+      <div style="height:10px; background:#111; border-radius:5px; margin-top:5px;">
+        <div id="bar" style="height:100%; width:0%; background:var(--main); transition:0.3s;"></div>
+      </div>
+    </aside>
+
+    <main>
+      <div style="display:flex; flex-direction: column; gap: 4px; margin-bottom:10px; min-width: 220px;">
+        <div id="status-msg" style="color:var(--neon-purple); font-size:12px; font-weight:bold; letter-spacing:.12em;">
+          SISTEMA ATTIVO
+        </div>
+        <div id="slow-timer" style="color: var(--neon-gold); font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 14px; height: 20px;"></div>
+      </div>
+      <div style="display:flex; justify-content: space-between; margin-bottom:10px; gap: 14px;">
+        <div aria-label="Vite" id="vite-ui">❤️❤️❤️</div>
+      </div>
+
+      <section id="gioco" aria-label="Area di gioco">
+        <div id="cestino" aria-label="Cestino">🗑️</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+const biomi = [ // Array dei biomi del gioco
+      { n: "OCEANO PLASTICO", items: ["🥤", "🛍️"], names: ["Bottiglia", "Sacchetto"], goal: 10, class: "biome-0" }, // Primo bioma
+      { n: "ARIA TOSSICA", items: ["🏭", "☁️"], names: ["Fumi", "Smog"], goal: 25, class: "biome-1" }, // Secondo bioma
+      { n: "TERRA DESOLATA", items: ["🛢️", "🏚️"], names: ["Petrolio", "Macerie"], goal: 50, class: "biome-2" }, // Terzo bioma
+      { n: "RESTAURO VERDE", items: ["🚮", "♻️"], names: ["Bio-Box", "Riciclo"], goal: 100, class: "biome-3" } // Bioma finale
+    ];
+
+    let punti = 0, vite = 3, biomeIdx = 0, isGameOver = false; // Stato del gioco: punteggio, vite, bioma attuale, game over
+    let reverseInput = false; // Controlli invertiti attivi o no
+
+    // Moltiplicatore della velocità di caduta (⏳ lo porta a 0.5 temporaneamente)
+    let fallSpeedMultiplier = 1; // Velocità normale
+    let slowTimeout = null; // Timeout effetto slow
+    let slowInterval = null; // Timer countdown slow
+
+    function aggiornaUI(){ // Aggiorna elementi grafici
+      document.getElementById("punti-ui").innerText = punti; // Mostra punti
+      document.getElementById("vite-ui").innerText = "❤️".repeat(vite); // Mostra vite
+
+      const pct = Math.max(0, Math.min(100, (punti / 100) * 100)); // Calcola percentuale progressione
+      document.getElementById("bar").style.width = pct + "%"; // Aggiorna barra progressione
+    }
+
+    function aggiornaScanner() { // Aggiorna pannello laterale
+      const b = biomi[biomeIdx]; // Bioma corrente
+      document.body.className = b.class; // Cambia stile del body
+      document.getElementById("biome-name").innerText = b.n; // Nome bioma
+      const catchList = document.getElementById("list-catch"); // Lista oggetti da prendere
+      catchList.innerHTML = b.items.map((it, i) => // Genera HTML dinamico
+        `<div class="item-row catch"><span>${it}</span><b>${b.names[i]}</b></div>` // Riga item
+      ).join(""); // Unisce tutto
+    }
+
+    window.addEventListener("mousemove", (e) => { // Movimento mouse
+      if (isGameOver) return; // Se game over esce
+      const gioco = document.getElementById("gioco"); // Area gioco
+      const rect = gioco.getBoundingClientRect(); // Posizione area
+      let x = e.clientX - rect.left - 30; // Calcolo posizione X
+      if (reverseInput) x = rect.width - (e.clientX - rect.left) - 30; // Inversione controlli
+      document.getElementById("cestino").style.left =
+        Math.max(0, Math.min(gioco.offsetWidth - 60, x)) + "px"; // Limita movimento dentro area
+    });
+
+    function perdiVita(){ // Funzione perdita vita
+      vite--; // Riduce vite
+      aggiornaUI(); // Aggiorna UI
+      const msg = document.getElementById("status-msg"); // Messaggio stato
+      msg.innerText = "DANNO SUBITO!"; // Messaggio danno
+
+      if (vite <= 0){ // Se vite finite
+        isGameOver = true; // Game over attivo
+        msg.innerText = "GAME OVER"; // Messaggio game over
+        setTimeout(() => location.reload(), 1200); // Riavvia dopo 1.2s
+      }
+    }
+
+    function triggerSlow(){ // Attiva effetto slow
+      const msg = document.getElementById("status-msg"); // Messaggio
+      const timerDisplay = document.getElementById("slow-timer"); // Timer UI
+      fallSpeedMultiplier = 0.5; // Dimezza velocità caduta
+      msg.innerText = "⏳ SLOW ATTIVO: CADUTA DIMEZZATA"; // Messaggio
+
+      let timeLeft = 5; // Durata 5 secondi
+      timerDisplay.innerText = `Tempo rimasto: ${timeLeft}s`; // Mostra tempo
+
+      if (slowTimeout) clearTimeout(slowTimeout); // Reset timeout precedente
+      if (slowInterval) clearInterval(slowInterval); // Reset intervallo precedente
+
+      slowInterval = setInterval(() => { // Countdown
+        timeLeft--; // Decrementa tempo
+        if (timeLeft > 0) {
+          timerDisplay.innerText = `Tempo rimasto: ${timeLeft}s`; // Aggiorna testo
+        } else {
+          clearInterval(slowInterval); // Stop countdown
+          timerDisplay.innerText = ""; // Pulisce display
+        }
+      }, 1000); // Ogni secondo
+
+      slowTimeout = setTimeout(() => { // Fine effetto
+        fallSpeedMultiplier = 1; // Ripristina velocità
+        msg.innerText = "SISTEMA ATTIVO"; // Messaggio normale
+        slowTimeout = null; // Reset variabile
+      }, 5000); // Dopo 5 secondi
+    }
+
+    function spawna() { // Genera oggetti
+      if (isGameOver) return; // Stop se game over
+      const b = biomi[biomeIdx]; // Bioma corrente
+      const r = Math.random(); // Numero casuale
+      let d; // Oggetto dati
+
+      // ⏳ al posto del robot: riduce la velocità di caduta
+      if (r > 0.98) d = { e: "⏳", t: "hourglass", c: "glow-help" }; // Slow
+      else if (r > 0.95) d = { e: "🔧", t: "heal", c: "glow-help" }; // Cura
+      else if (r > 0.91) d = { e: "🌧️", t: "acid", c: "glow-harm" }; // Acido
+      else if (r > 0.87) d = { e: "🦠", t: "virus", c: "glow-harm" }; // Virus
+      else if (r > 0.82) d = { e: "☢️", t: "danger", c: "glow-harm" }; // Pericolo
+      else d = { e: b.items[Math.floor(Math.random()*2)], t: "trash", c: "" }; // Spazzatura
+
+      const obj = document.createElement("div"); // Crea elemento
+      obj.className = "oggetto " + d.c; // Classe CSS
+      obj.innerText = d.e; // Emoji
+
+      const gioco = document.getElementById("gioco"); // Area gioco
+      const maxX = Math.max(0, gioco.clientWidth - 50); // Limite orizzontale
+
+      let x = Math.random() * maxX; // Posizione casuale X
+      let y = -60; // Parte fuori schermo
+      obj.style.left = x + "px"; // Posizione X
+      obj.style.top = y + "px"; // Posizione Y
+      gioco.appendChild(obj); // Aggiunge al DOM
+
+      const fall = setInterval(() => { // Loop caduta
+        if (isGameOver) { clearInterval(fall); obj.remove(); return; } // Stop se game over
+
+        y += (3 + (punti / 22)) * fallSpeedMultiplier; // Velocità caduta
+        obj.style.top = y + "px"; // Aggiorna posizione
+
+        const cRect = document.getElementById("cestino").getBoundingClientRect(); // Posizione cestino
+        const oRect = obj.getBoundingClientRect(); // Posizione oggetto
+
+        if (oRect.bottom > cRect.top + 20 && oRect.left < cRect.right && oRect.right > cRect.left) { // Collisione
+          processHit(d); // Gestione impatto
+          obj.remove(); // Rimuove oggetto
+          clearInterval(fall); // Stop loop
+        } else if (y > gioco.clientHeight + 60) { // Fuori schermo
+          if (d.t === "trash") perdiVita(); // Penalità solo per spazzatura mancata
+          obj.remove(); // Rimuove
+          clearInterval(fall); // Stop loop
+        }
+      }, 16); // ~60 FPS
+    }
+
+    function processHit(d) { // Gestione collisione
+      const msg = document.getElementById("status-msg"); // Messaggio UI
+
+      if (d.t === "hourglass") { // Slow
+        triggerSlow();
+      } else if (d.t === "acid") { // Acido
+        document.getElementById("cestino").style.transform = "scaleX(0.5)"; // Riduce cestino
+        msg.innerText = "CESTINO CORROSO!";
+        setTimeout(() => document.getElementById("cestino").style.transform = "scaleX(1)", 5000); // Ripristina
+      } else if (d.t === "virus") { // Virus
+        reverseInput = true; // Inverte controlli
+        msg.innerText = "CONTROLLI INVERTITI!";
+        setTimeout(() => {
+          reverseInput = false; // Ripristina controlli
+          msg.innerText = "SISTEMA ATTIVO";
+        }, 5000);
+      } else if (d.t === "heal") { // Cura
+        if (vite < 5) vite++; // Aumenta vite (max 5)
+        msg.innerText = "RIPARAZIONE: +1 VITA";
+      } else if (d.t === "danger") { // Pericolo
+        perdiVita(); // Danno
+      } else if (d.t === "trash") { // Oggetto corretto
+        punti++; // Incrementa punti
+        if (punti >= biomi[biomeIdx].goal && biomeIdx < 3) { // Cambio bioma
+          biomeIdx++;
+          aggiornaScanner();
+          msg.innerText = "BIOMA AGGIORNATO!";
+          setTimeout(() => msg.innerText = "SISTEMA ATTIVO", 1200);
+        }
+      }
+
+      aggiornaUI(); // Aggiorna UI
+
+      if (punti >= 100 && !isGameOver) { // Vittoria
+        isGameOver = true;
+        document.getElementById("victory-screen").style.display = "flex"; // Mostra schermata vittoria
+      }
+    }
+
+    // init
+    aggiornaScanner(); // Imposta bioma iniziale
+    aggiornaUI(); // Aggiorna UI iniziale
+
+    // loop spawn
+    setInterval(spawna, 650); // Genera oggetti ogni 650ms
+  </script>
+</body>
+</html>

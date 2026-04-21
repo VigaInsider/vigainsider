@@ -1,0 +1,203 @@
+:root {
+    --green-bright: #2ecc71;
+    --green-glow: #27ae60;
+    --bg-overlay: rgba(0, 0, 0, 0.6);
+    --panel-bg: rgba(0, 0, 0, 0.3);
+    --text-main: 1.2rem;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    background: url('../assets/media/img/sfondo_finale.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Overlay per scurire leggermente lo sfondo e far risaltare il testo */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-overlay);
+    z-index: 0;
+}
+
+/* Layout Principale (Diviso in Sinistra e Destra) */
+#start {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+}
+
+.content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* --- SEZIONE SINISTRA (60% del totale) --- */
+.left1 {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column; /* Divide in Alto e Basso */
+    border-right: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+/* Parte in ALTO a sinistra (Titolo) */
+.left1 .top {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.left1 .top h1 {
+    font-size: 4.5rem;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 0 20px var(--green-bright), 0 0 30px var(--green-glow);
+    letter-spacing: 5px;
+    text-align: center;
+}
+
+/* Parte in BASSO a sinistra (Divisa in Bottoni e Punteggi) */
+.left1 .bottom {
+    flex: 1;
+    display: flex; /* Divide in Sinistra (left2) e Destra (right2) */
+    padding: 40px;
+    gap: 30px;
+}
+
+/* Bottoni (Basso-Sinistra) */
+.left2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    width: 280px;
+    padding: 18px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    background: transparent;
+    border: 2px solid var(--green-bright);
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: var(--green-bright);
+    color: black;
+    box-shadow: 0 0 25px var(--green-bright);
+    transform: scale(1.05);
+}
+
+/* Riepilogo Punteggi (Basso-Destra) */
+.right2 {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel-bg);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.right2 p {
+    font-size: 1.4rem;
+    line-height: 2;
+    margin: 0;
+}
+
+.right2 b {
+    color: var(--green-bright);
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.right2 i {
+    color: #ccc;
+    font-style: normal;
+    font-weight: bold;
+}
+
+/* --- SEZIONE DESTRA (40% del totale - Classifica) --- */
+.right1 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.right1 h2 {
+    font-size: 2.5rem;
+    color: var(--green-bright);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+/* Tabella Classifica */
+table.container {
+    width: 90%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table.container th {
+    background: rgba(46, 204, 113, 0.5);
+    padding: 15px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+table.container td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.1rem;
+}
+
+table.container tr:last-child td {
+    border-bottom: none;
+}
+
+table.container tr:hover {
+    background: rgba(46, 204, 113, 0.1);
+}
+
+/* Supporto per Mobile/Schermi piccoli */
+@media (max-width: 1000px) {
+    .content {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .left1 .bottom {
+        flex-direction: column;
+    }
+    .left1 .top h1 {
+        font-size: 2.5rem;
+    }
+}

@@ -1,0 +1,111 @@
+:root {
+    --p1-grad: linear-gradient(135deg, #43a047, #1b5e20);
+    --p2-grad: linear-gradient(135deg, #8d6e63, #4e342e);
+    --card-back: linear-gradient(135deg, #795548, #3e2723);
+    --card-front: linear-gradient(135deg, #a5d6a7, #81c784);
+    --glass-border: rgba(255, 255, 255, 0.4);
+}
+
+body {
+    background: linear-gradient(-45deg, #e8f5e9, #e3f2fd, #f1f8e9, #bbdefb);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    font-family: 'Quicksand', sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; margin: 0; overflow: hidden;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.stats-bar {
+    position: absolute; top: 25px; left: 50%; transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px);
+    padding: 12px 30px; border-radius: 50px;
+    border: 2px solid var(--glass-border); box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    font-weight: 700; font-size: 1.2rem; color: #1b5e20;
+    transition: all 0.3s ease; z-index: 10;
+}
+
+.stats-bar.pulse { transform: translateX(-50%) scale(1.1); border-color: #2e7d32; }
+
+.game-container { display: flex; align-items: center; gap: 40px; }
+
+.sidebar {
+    width: 220px; padding: 30px; border-radius: 35px; color: white;
+    backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0.3; transform: scale(0.85);
+}
+
+.p1-card { background: var(--p1-grad); }
+.p2-card { background: var(--p2-grad); }
+.player-active { opacity: 1; transform: scale(1); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+
+.value { font-size: 4rem; font-weight: 700; display: block; }
+.divider { height: 1px; background: rgba(255,255,255,0.2); margin: 15px 0; }
+.streak-label { font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 10px; margin-top: 15px; text-align: center;}
+
+.grid {
+    display: grid; grid-template-columns: repeat(5, 105px); gap: 15px;
+    background: rgba(255,255,255,0.2); padding: 20px; border-radius: 30px;
+    border: 1px solid var(--glass-border);
+}
+
+.memory-card { width: 105px; height: 105px; cursor: pointer; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.memory-card.flipped { transform: rotateY(180deg); }
+
+.front, .back {
+    position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+    border-radius: 20px; display: flex; justify-content: center; align-items: center; font-size: 2.8rem;
+}
+
+.back { background: var(--card-back); color: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.1); }
+.front { background: var(--card-front); transform: rotateY(180deg); border: 3px solid #2e7d32; }
+
+.overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 1000;
+}
+
+.flex-active { display: flex; }
+
+.glass-modal {
+    background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 40px;
+    text-align: center; width: 380px; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    animation: popIn 0.5s ease;
+}
+
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.input-group { margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
+
+/* STILE INPUT AGGIORNATO CON FONT QUICKSAND */
+input { 
+    padding: 15px; 
+    border-radius: 15px; 
+    border: 2px solid #eee; 
+    outline: none; 
+    font-family: 'Quicksand', sans-serif; /* Font applicato qui */
+    font-size: 1.1rem; 
+    font-weight: 500;
+    text-align: center; 
+    transition: 0.3s; 
+    background: white;
+}
+
+input:focus { 
+    border-color: #2e7d32; 
+    box-shadow: 0 0 10px rgba(46, 125, 50, 0.1); 
+}
+
+input::placeholder {
+    color: #bbb;
+}
+
+.btn-main { background: var(--p1-grad); color: white; border: none; padding: 15px; border-radius: 50px; width: 100%; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; font-family: inherit;}
+.btn-alt { background: transparent; color: #555; border: 2px solid #ddd; padding: 12px; border-radius: 50px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: inherit;}
+.btn-main:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }

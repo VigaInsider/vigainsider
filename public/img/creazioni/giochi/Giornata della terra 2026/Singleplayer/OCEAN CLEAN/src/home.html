@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>OCEAN CLEAN</title>
+    <style>
+        @import url('https://googleapis.com');
+
+        :root {
+            --cyan: #00f2ff;
+            --deep-blue: #020b12;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: #000; overflow: hidden; 
+            font-family: 'JetBrains Mono', monospace; color: #fff;
+        }
+
+        #master-hub {
+            position: relative; width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #0a1f2d 0%, #000 70%);
+            perspective: 1200px;
+        }
+
+        canvas { position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: 0.6; }
+
+        .grid-3d {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background-image: linear-gradient(var(--cyan) 1px, transparent 1px), linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
+            background-size: 60px 60px; opacity: 0.05; transform: rotateX(65deg);
+            animation: moveGrid 20s linear infinite; z-index: 0;
+        }
+        @keyframes moveGrid { from { background-position: 0 0; } to { background-position: 0 600px; } }
+
+        .hud-overlay {
+            position: absolute; inset: 30px; border: 1px solid rgba(0, 242, 255, 0.1);
+            pointer-events: none; z-index: 10;
+        }
+        .corner { position: absolute; width: 20px; height: 20px; border: 2px solid var(--cyan); }
+        .tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+        .br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+        #parallax-core {
+            position: relative; z-index: 5; text-align: center;
+            transform-style: preserve-3d; transition: transform 0.1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Arial Black', sans-serif; font-size: 8vw; font-weight: 900;
+            margin: 0; line-height: 0.8; letter-spacing: -0.05em; text-transform: uppercase;
+            background: linear-gradient(180deg, #fff 30%, var(--cyan) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.3));
+        }
+
+        .sub-tag {
+            font-size: 0.8vw; letter-spacing: 1.2vw;
+            margin-top: 20px; color: var(--cyan); opacity: 0.6; text-indent: 1.2vw;
+        }
+
+        .btn-wrap { margin-top: 8vh; position: relative; display: inline-block; padding: 20px; }
+        
+        .radar-scan {
+            position: absolute; inset: 0; border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 50%; animation: rotate 6s linear infinite;
+        }
+        .radar-scan::after {
+            content: ''; position: absolute; top: -5px; left: 50%;
+            width: 10px; height: 10px; background: var(--cyan); border-radius: 50%;
+            box-shadow: 0 0 20px var(--cyan);
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .btn-final {
+            display: block; cursor: pointer; padding: 25px 80px;
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px); color: #fff; font-size: 1.1rem;
+            letter-spacing: 10px; text-transform: uppercase; font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .btn-final:hover {
+            background: #fff; color: #000; letter-spacing: 15px;
+            transform: scale(1.1); box-shadow: 0 0 50px rgba(0, 242, 255, 0.5);
+        }
+
+        #instructions-overlay {
+            position: fixed; inset: 0; background: rgba(0, 5, 10, 0.95);
+            display: none; justify-content: center; align-items: center; z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        .inst-box {
+            max-width: 600px; padding: 40px; border: 1px solid var(--cyan);
+            background: rgba(0, 242, 255, 0.05); text-align: left;
+        }
+        .inst-box h2 { color: var(--cyan); letter-spacing: 5px; margin-top: 0; }
+        .inst-box ul { list-style: none; padding: 0; }
+        .inst-box li { margin-bottom: 15px; font-size: 14px; line-height: 1.6; }
+        .inst-box li span { color: var(--cyan); font-weight: bold; }
+        .confirm-btn {
+            margin-top: 30px; width: 100%; padding: 15px;
+            background: var(--cyan); border: none; color: #000;
+            font-family: inherit; font-weight: bold; letter-spacing: 5px;
+            cursor: pointer; text-transform: uppercase;
+        }
+
+        .meta { position: absolute; font-size: 9px; color: var(--cyan); opacity: 0.4; letter-spacing: 2px; }
+        .meta-l { top: 60px; left: 60px; }
+        .meta-r { bottom: 60px; right: 60px; text-align: right; }
+    </style>
+</head>
+<body>
+
+    <div id="master-hub">
+        <canvas id="snow"></canvas>
+        <div class="grid-3d"></div>
+
+        <div class="hud-overlay">
+            <div class="corner tl"></div>
+            <div class="corner br"></div>
+        </div>
+
+        <div class="meta meta-l">
+            UNITÀ: DRONE_NEUTRALE_01<br>STATO: ATTIVO<br>SCANSIONE PROFONDITA'...
+        </div>
+
+        <div id="parallax-core">
+            <div class="sub-tag">Protocollo di pulizia</div>
+            <h1>OCEAN<br>CLEAN</h1>
+            
+            <div class="btn-wrap">
+                <div class="radar-scan"></div>
+                <div class="btn-final" onclick="showInstructions()">Inizia</div>
+            </div>
+        </div>
+
+        <div id="instructions-overlay">
+            <div class="inst-box">
+                <h2>ISTRUZIONI_MISSIONE</h2>
+                <ul>
+                    <li><span>LIVELLI:</span> Dovrai superare 5 zone di profondità crescente.</li>
+                    <li><span>CONTROLLI:</span> Muovi il drone 🤖 usando il <span>MOUSE</span>.</li>
+                    <li><span>OBIETTIVO:</span> Raccogli i rifiuti per pulire l'area.</li>
+                    <li><span>PERICOLO:</span> Evita la fauna marina. Il drone ha uno scudo limitato.</li>
+                </ul>
+                <button class="confirm-btn" onclick="startGame()">Avvia</button>
+            </div>
+        </div>
+
+        <div class="meta meta-r">
+            LAT: 44.4949 N // LNG: 11.3426 E<br>PRESSIONE: 1086 BAR<br>© 2026 UNITA'_PROFONDA
+        </div>
+    </div>
+
+    <script>
+        const hub = document.getElementById('master-hub');
+        const core = document.getElementById('parallax-core');
+        const canvas = document.getElementById('snow');
+        const ctx = canvas.getContext('2d');
+
+        function showInstructions() {
+            document.getElementById('instructions-overlay').style.display = 'flex';
+        }
+
+        function startGame() {
+            window.location.href = 'gioco.html';
+        }
+
+        let particles = [];
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = Array.from({length: 100}, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                s: Math.random() * 2,
+                v: Math.random() * 0.5 + 0.2
+            }));
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+            particles.forEach(p => {
+                p.y -= p.v; if (p.y < 0) p.y = canvas.height;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            hub.style.setProperty('--mx', x + '%');
+            hub.style.setProperty('--my', y + '%');
+
+            const rx = (window.innerWidth / 2 - e.pageX) / 30;
+            const ry = (window.innerHeight / 2 - e.pageY) / 30;
+            core.style.transform = `rotateY(${-rx}deg) rotateX(${ry}deg)`;
+        });
+
+        window.addEventListener('resize', init);
+        init(); draw();
+    </script>
+</body>
+</html>

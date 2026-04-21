@@ -31,6 +31,16 @@ $router->get('/creazioni', function() {
         'title' => 'VigaInsider - creazioni',
     ]);
 });
+$router->get('/aggiorna_creazioni', function() {
+    view('aggiorna_creazioni', [
+        'title' => 'VigaInsider - aggiorna creazioni',
+    ]);
+});
+$router->post('/aggiorna_creazioni', function() {
+    view('aggiorna_creazioni', [
+        'title' => 'VigaInsider - aggiorna creazioni',
+    ]);
+});
 
 $router->get('/vigasecurity', function() {
     view('vigasecurity', [

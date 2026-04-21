@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>OCEAN CLEAN</title>
+    <style>
+        @import url('https://googleapis.com');
+        :root { --cyan: #00f2ff; --danger: #ff4d4d; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'JetBrains Mono', monospace; }
+        canvas { display: block; cursor: none; }
+        #hud { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 30px; z-index: 10; }
+        .hud-module { background: rgba(0, 15, 25, 0.5); border-left: 2px solid var(--cyan); padding: 15px 20px; backdrop-filter: blur(10px); }
+        .label { font-size: 10px; letter-spacing: 2px; opacity: 0.7; text-transform: uppercase; }
+        .value { font-size: 28px; font-weight: 700; color: #fff; display: block; }
+        #stato-scudo { font-size: 11px; margin-top: 5px; border: 1px solid currentColor; padding: 2px 6px; display: inline-block; }
+        #modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,5,10,0.95); border: 1px solid var(--cyan); padding: 50px; text-align: center; display: none; z-index: 100; }
+        button { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 12px 40px; font-family: inherit; cursor: pointer; text-transform: uppercase; letter-spacing: 4px; transition: 0.3s; }
+        button:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
+        #fx { position: absolute; inset: 0; pointer-events: none; transition: 0.2s; z-index: 5; }
+        .hit { background: rgba(255, 0, 0, 0.2); box-shadow: inset 0 0 100px rgba(255,0,0,0.7); }
+    </style>
+</head>
+<body>
+    <div id="fx"></div>
+    <div id="hud">
+        <div style="display: flex; justify-content: space-between;">
+            <div class="hud-module">
+                <div class="label" id="lvlTitle">ZONA 01</div>
+                <span class="value"><span id="wasteCount">0</span><small style="opacity:0.3; font-size:16px"> / <span id="targetCount">0</span></small></span>
+            </div>
+            <div class="hud-module" style="text-align: right;">
+                <div class="label">DRONE_STATO</div>
+                <div id="stato-scudo">SISTEMA_OK</div>
+            </div>
+        </div>
+    </div>
+    <div id="modal">
+        <h1 id="modalTitle">AREA PULITA</h1>
+        <button id="mainBtn" onclick="handleButtonClick()">AVANTI</button>
+    </div>
+    <canvas id="game"></canvas>
+
+<script>
+    let canvas = document.getElementById('game');
+    let ctx = canvas.getContext('2d');
+    let modal = document.getElementById('modal');
+    let fx = document.getElementById('fx');
+
+    let gameActive, player, enemies, trash, frame, wasteCollected, hasShield, currentLvl = 0;
+
+    let FISH_TYPES = ['🦈','🐙','🐡','🦑','🦂','🦀','🐢'];
+    let WASTE_TYPES = ['🍾','🥤','🥫','🛍️','🔋','📦','🛢️','💻','🚬'];
+
+    let levels = [
+        { name: "SUPERFICIE", bg: "#48cae4", target: 8, speed: 7, spawn: 0.05, effect: "nessuno" },
+        { name: "BARRIERA", bg: "#0096c7", target: 10, speed: 14, spawn: 0.06, effect: "corrente" },
+        { name: "RISALITA PREDATORI", bg: "#023e8a", target: 12, speed: 12, spawn: 0.08, effect: "attacco_verticale" },
+        { name: "FOSSA", bg: "#03045e", target: 14, speed: 13, spawn: 0.08, effect: "pressione" },
+        { name: "ABISSI OSCURI", bg: "#000814", target: 16 , speed: 14, spawn: 0.09, effect: "oscurita_totale" }
+    ];
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resize; resize();
+
+    function init(l) {
+        currentLvl = l; gameActive = true; hasShield = true; wasteCollected = 0;
+        enemies = []; trash = []; frame = 0;
+        player = { x: 200, y: canvas.height/2 };
+        modal.style.display = 'none';
+        document.getElementById('lvlTitle').innerText = `ZONA ${currentLvl + 1}: ${levels[currentLvl].name}`;
+        document.getElementById('targetCount').innerText = levels[currentLvl].target;
+        updateUI(); animate();
+    }
+
+    window.onmousemove = (e) => {
+        player.x = e.clientX;
+        let targetY = e.clientY;
+        if(levels[currentLvl].effect === "corrente") player.y += (targetY - player.y) * 0.15;
+        else player.y = targetY;
+    };
+
+    function updateUI() {
+        document.getElementById('wasteCount').innerText = wasteCollected;
+        let s = document.getElementById('stato-scudo');
+        if(s) {
+            s.innerText = hasShield ? "SISTEMA_OK" : "SCUDO_DANNEGGIATO";
+            s.style.color = hasShield ? "#00f2ff" : "#ff4d4d";
+        }
+    }
+
+    function animate() {
+        if (!gameActive) return;
+        frame++;
+        
+        ctx.fillStyle = (levels[currentLvl].effect === "oscurita_totale") ? "#000" : levels[currentLvl].bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        if (Math.random() < levels[currentLvl].spawn) {
+            if(levels[currentLvl].effect === "attacco_verticale") {
+                enemies.push({ x: Math.random() * canvas.width, y: canvas.height + 50, vx: 0, vy: -(levels[currentLvl].speed + 2), char: FISH_TYPES[Math.floor(Math.random()*FISH_TYPES.length)] });
+            } else {
+                enemies.push({ x: canvas.width + 50, y: Math.random() * canvas.height, vx: -levels[currentLvl].speed, vy: 0, char: FISH_TYPES[Math.floor(Math.random()*FISH_TYPES.length)] });
+            }
+        }
+        if (Math.random() < 0.02) {
+            trash.push({ x: canvas.width + 50, y: Math.random() * canvas.height, char: WASTE_TYPES[Math.floor(Math.random()*WASTE_TYPES.length)], v: 4.5 });
+        }
+
+        if(levels[currentLvl].effect === "oscurita_totale") renderDarkness();
+        else drawEntities();
+
+        requestAnimationFrame(animate);
+    }
+
+    function drawEntities() {
+        ctx.font = "45px Arial"; ctx.textAlign = "center";
+        ctx.fillText("🤖", player.x, player.y + 15);
+        if(hasShield) {
+            ctx.beginPath(); ctx.arc(player.x, player.y, 40, 0, Math.PI*2);
+            ctx.strokeStyle = "#00f2ff"; ctx.lineWidth = 2; ctx.stroke();
+        }
+
+        enemies.forEach((e, i) => {
+            e.x += e.vx; e.y += (e.vy || 0);
+            if(levels[currentLvl].effect === "pressione") e.y += Math.sin(frame * 0.15) * 8;
+            ctx.fillText(e.char, e.x, e.y + 15);
+            if (Math.hypot(player.x - e.x, player.y - e.y) < 45) {
+                fx.classList.add('hit'); setTimeout(() => fx.classList.remove('hit'), 200);
+                if(hasShield) { hasShield = false; enemies.splice(i, 1); updateUI(); }
+                else gameOver();
+            }
+        });
+
+        trash.forEach((t, i) => {
+            t.x -= t.v; 
+            ctx.fillText(t.char, t.x, t.y + 15);
+            if (Math.hypot(player.x - t.x, player.y - t.y) < 50) {
+                wasteCollected++; trash.splice(i, 1); updateUI();
+                if(wasteCollected >= levels[currentLvl].target) win();
+            }
+        });
+
+        enemies = enemies.filter(e => e.x > -100 && e.y > -100 && e.y < canvas.height + 100);
+        trash = trash.filter(t => t.x > -100);
+    }
+
+    function renderDarkness() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, 400, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.fillStyle = levels[currentLvl].bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawEntities();
+        ctx.restore();
+    }
+
+    function win() {
+        gameActive = false;
+        modal.style.display = 'block';
+        if(currentLvl === 4) {
+            document.getElementById('modalTitle').innerText = "MISSIONE COMPLETATA!";
+            document.getElementById('mainBtn').innerText = "RICOMINCIA";
+        } else {
+            document.getElementById('modalTitle').innerText = "AREA PULITA";
+            document.getElementById('mainBtn').innerText = "AVANTI";
+        }
+    }
+
+    function gameOver() {
+        gameActive = false;
+        modal.style.display = 'block';
+        document.getElementById('modalTitle').innerText = "SISTEMA DANNEGGIATO";
+        document.getElementById('mainBtn').innerText = "RIPROVA";
+    }
+
+    function handleButtonClick() {
+        if (document.getElementById('mainBtn').innerText === "RICOMINCIA") init(0);
+        else if (document.getElementById('mainBtn').innerText === "RIPROVA") init(currentLvl);
+        else init(currentLvl + 1);
+    }
+
+    init(0);
+</script>
+</body>
+</html>

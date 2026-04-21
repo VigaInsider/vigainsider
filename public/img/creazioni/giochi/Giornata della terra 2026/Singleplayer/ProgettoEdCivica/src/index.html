@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h2>Fai la raccolta differenziata!</h2>
+        <div class="box">
+            <p id="punteggio">Punteggio: </p>
+        </div>
+    </header>
+
+    <div id="rifiuti" draggable="true"></div>
+    
+    <!-- Cestini -->
+    <div class="cestini">
+        <img src="finaleUmido.png" ondragover="event.preventDefault()" ondrop="controllo('umido')">
+        <img src="finalePlastica.png" ondragover="event.preventDefault()" ondrop="controllo('plastica')">
+        <img src="finaleCarta.png" ondragover="event.preventDefault()" ondrop="controllo('carta')">
+        <img src="finaleVetro.png" ondragover="event.preventDefault()" ondrop="controllo('vetro')">
+    </div>
+
+    <footer>
+        <p>150 alberi salvati</p>
+        <p>1500 giocatori online</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
