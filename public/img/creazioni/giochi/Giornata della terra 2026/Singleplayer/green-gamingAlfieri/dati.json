@@ -1,0 +1,5 @@
+{
+    "name": "Save the island",
+    "descrizione": "Un giocco in cui devi salvare l'isola dai rifiuti e facendo la raccolta differenziata",
+    "index": "src/index.php"
+}

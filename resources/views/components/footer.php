@@ -13,17 +13,17 @@
                     <div>
                         <h5 class="font-bold mb-4">Link Rapidi</h5>
                         <ul class="text-gray-100 space-y-2">
-                            <li><a href="/chisiamo" class="hover:text-gray-50 transition">Chi siamo</a></li>
+                            <li><a href="#" class="hover:text-gray-50 transition">Chi siamo</a></li>
                             <li><a href="#" class="hover:text-gray-50 transition">Contatti</a></li>
                             <li><a href="#" class="hover:text-gray-50 transition">Privacy</a></li>
                         </ul>
                     </div>
                     <div>
-                        <h5 class="font-bold mb-4">Link utili</h5>
+                        <h5 class="font-bold mb-4">Social</h5>
                         <ul class="text-gray-100 space-y-2">
-                            <li><a href="https://www.issvigano.edu.it/" class="hover:text-gray-50 transition">ISS Viganò</a></li>
-                            <li><a href="https://www.instagram.com/cic.lab/" class="hover:text-gray-50 transition">Instagram CicLab</a></li>
-                            <li><a href="https://github.com/Vigainsider" class="hover:text-gray-50 transition">GitHub</a></li>
+                            <li><a href="#" class="hover:text-gray-50 transition">Facebook</a></li>
+                            <li><a href="#" class="hover:text-gray-50 transition">Instagram</a></li>
+                            <li><a href="#" class="hover:text-gray-50 transition">LinkedIn</a></li>
                         </ul>
                     </div>
                 </div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Memory Premium 🌍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="stats-bar">
+        🍃 Mosse: <span id="moves">0</span>
+    </div>
+
+    <div class="game-container">
+        <div id="player1-area" class="sidebar p1-card player-active">
+            <h2 id="name1">Giocatore 1</h2>
+            <div class="divider"></div>
+            <div class="stat-box">
+                <span class="label">Punti</span>
+                <span id="score1" class="value">0</span>
+            </div>
+            <p class="streak-label">Miglior Streak: <span id="streak1">0</span></p>
+        </div>
+
+        <div class="main-column">
+            <div id="game-grid" class="grid"></div>
+        </div>
+
+        <div id="player2-area" class="sidebar p2-card">
+            <h2 id="name2">Giocatore 2</h2>
+            <div class="divider"></div>
+            <div class="stat-box">
+                <span class="label">Punti</span>
+                <span id="score2" class="value">0</span>
+            </div>
+            <p class="streak-label">Miglior Streak: <span id="streak2">0</span></p>
+        </div>
+    </div>
+
+    <div id="name-prompt-overlay" class="overlay flex-active">
+        <div class="glass-modal">
+            <h1>Benvenuti! 🌱</h1>
+            <p>Inserite i nomi dei protettori della Terra</p>
+            <div class="input-group">
+                <input type="text" id="input-p1" placeholder="Nome Giocatore 1" maxlength="12">
+                <input type="text" id="input-p2" placeholder="Nome Giocatore 2" maxlength="12">
+            </div>
+            <button id="start-game-btn" class="btn-main">Inizia Sfida</button>
+        </div>
+    </div>
+
+    <div id="game-over-overlay" class="overlay">
+        <div class="glass-modal">
+            <h1 id="winner-message">Fine Partita!</h1>
+            <p>Grazie per aver salvato il pianeta! 🌍</p>
+            <div class="btn-group-vertical">
+                <button id="restart-btn" class="btn-main">Rivincita</button>
+                <button id="change-names-btn" class="btn-alt">Cambia Nomi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

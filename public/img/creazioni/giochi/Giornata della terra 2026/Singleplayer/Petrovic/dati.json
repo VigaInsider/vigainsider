@@ -1,0 +1,5 @@
+{
+    "name": "WasteScanner AI",
+    "descrizione": "Scegli cosa inquina di piu' e carica una foto per scoprire di che materiale si tratta e come si ricicla",
+    "index": "src/index.html"
+}

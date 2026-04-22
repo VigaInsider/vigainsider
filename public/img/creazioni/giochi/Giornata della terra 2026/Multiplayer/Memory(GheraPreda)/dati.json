@@ -1,0 +1,5 @@
+{
+    "name": "Memory",
+    "descrizione" : "Memory con 2 squadre, chi riesce a trovare piu' coppie vince",
+    "index": "src/index.html"
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livello Vetro - Versione Avanzata</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background: url(tree.webp);
+            color: white; 
+            padding: 20px;
+        }
+        h1 { color: black; font-size: 2.5em; margin-bottom: 10px; }
+        .area-gioco {
+            position: relative; 
+            height: 400px; 
+            width: 80%; 
+            background: white;
+            margin: 20px auto; 
+            border-radius: 10px; 
+            border: 5px solid grey; 
+            overflow: hidden;
+        }
+        .bottiglia {
+            width: 50px; 
+            height: 100px; 
+            position: absolute; 
+            background: url('vetro.png') no-repeat center/contain;
+        }
+        .cestino {
+            width: 100px; 
+            height: 120px; 
+            position: absolute; 
+            bottom: 10px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: url('cestino2.jpg') no-repeat center/contain; 
+        }
+        p { font-size: 1.5em; }
+        .punteggio {
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .bottoni {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1.5em;
+            color: white;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            
+        }
+        button:hover { 
+            background-color: red; 
+        }
+        .home {
+            background-color: #e74c3c;
+        }
+        .home:hover {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Raccogli il vetro!</h1>
+    <div class="area-gioco" id="area-gioco">
+        <div class="cestino" id="cestino"></div>
+    </div>
+    <p>Punteggio: <span id="punteggio" class="punteggio">0</span></p>
+    <div class="bottoni">
+        <button onclick="avviaGiocoVetro()">Inizia</button>
+        <button class="home" onclick="location.href='index.html'">Home</button>
+    </div>
+
+    <script>
+        let punteggioVetro = 0;
+        let intervalloGioco, velocitaBottiglia = 3000, tempoRimanente = 20;
+        let giocoAttivo = false;
+        let cestino, areaGioco, timer;
+
+        function avviaGiocoVetro() {
+            areaGioco = document.getElementById("area-gioco");
+            cestino = document.getElementById("cestino");
+            let punteggioDisplay = document.getElementById("punteggio");
+
+            areaGioco.innerHTML = '<div class="cestino" id="cestino"></div>';
+            cestino = document.getElementById("cestino");
+
+            punteggioVetro = 0;
+            punteggioDisplay.innerText = punteggioVetro;
+            giocoAttivo = true;
+            tempoRimanente = 20;
+            velocitaBottiglia = 3000;
+
+            timer = setInterval(() => {
+                if (tempoRimanente > 0) {
+                    tempoRimanente--;
+                    if (tempoRimanente % 5 === 0) velocitaBottiglia = Math.max(1000, velocitaBottiglia - 500);
+                } else {
+                    terminaGiocoVetro();
+                }
+            }, 1000);
+
+            function creaBottiglia() {
+                if (!giocoAttivo) return;
+                
+                let bottiglia = document.createElement("div");
+                bottiglia.classList.add("bottiglia");
+                bottiglia.style.left = Math.random() * 80 + "%";
+                bottiglia.style.top = "-100px";
+                bottiglia.style.transition = `top ${velocitaBottiglia / 1000}s linear`;
+                areaGioco.appendChild(bottiglia);
+
+                setTimeout(() => {
+                    bottiglia.style.top = "90%";
+
+                    let verificaCollisione = setInterval(() => {
+                        let bottigliaRect = bottiglia.getBoundingClientRect();
+                        let cestinoRect = cestino.getBoundingClientRect();
+                        let areaGiocoRect = areaGioco.getBoundingClientRect();
+
+                        if (
+                            bottigliaRect.bottom >= cestinoRect.top &&
+                            bottigliaRect.left >= cestinoRect.left &&
+                            bottigliaRect.right <= cestinoRect.right
+                        ) {
+                            punteggioVetro++;
+                            punteggioDisplay.innerText = punteggioVetro;
+                            punteggioDisplay.style.transform = "scale(1.2)";
+                            setTimeout(() => punteggioDisplay.style.transform = "scale(1)", 200);
+                            bottiglia.remove();
+                            clearInterval(verificaCollisione);
+                        }
+
+                        if (bottigliaRect.top > areaGiocoRect.bottom) {
+                            bottiglia.remove();
+                            clearInterval(verificaCollisione);
+                        }
+                    }, 50);
+                }, 100);
+
+                setTimeout(() => bottiglia.remove(), velocitaBottiglia);
+            }
+            
+            intervalloGioco = setInterval(creaBottiglia, 1000);
+            document.addEventListener("mousemove", muoviCestino);
+            document.addEventListener("keydown", muoviCestinoTasti);
+        }
+
+        function muoviCestino(event) {
+            if (!giocoAttivo) return;
+            let areaGiocoBounds = areaGioco.getBoundingClientRect();
+            let cestinoWidth = cestino.offsetWidth;
+            let nuovoSinistra = event.clientX - areaGiocoBounds.left - cestinoWidth / 2;
+            if (nuovoSinistra >= 0 && nuovoSinistra <= areaGioco.offsetWidth - cestinoWidth) {
+                cestino.style.left = nuovoSinistra + "px";
+            }
+        }
+
+        function terminaGiocoVetro() {
+            clearInterval(timer);
+            clearInterval(intervalloGioco);
+            giocoAttivo = false;
+            alert("Tempo scaduto! Hai raccolto " + punteggioVetro + " bottiglie.");
+        }
+    </script>
+</body>
+</html>

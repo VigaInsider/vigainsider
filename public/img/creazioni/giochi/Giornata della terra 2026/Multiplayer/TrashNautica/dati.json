@@ -1,0 +1,5 @@
+{
+    "name": "Trash Nautica",
+    "descrizione" : "Un gioco multiplayer cooperativo in cui i giocatori devono collaborare per pulire un oceano virtuale da rifiuti, affrontando sfide ambientali e imparando l'importanza della sostenibilità.",
+    "index": "src/index.html"
+}

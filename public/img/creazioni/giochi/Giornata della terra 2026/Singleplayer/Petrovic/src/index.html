@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WasteScanner AI</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <canvas id="particle-canvas"></canvas>
+
+  <nav class="nav floating-nav">
+    <div class="ntab on" onclick="nav('hl')">🌍 Higher or Lower</div>
+    <div class="ntab" onclick="nav('scan')">📸 Scanner</div>
+  </nav>
+
+  <div class="content">
+
+    <div class="page" id="pg-scan">
+      <div class="panel panel-l">
+        <div>
+          <div class="lbl">Carica immagine</div>
+          <div class="upzone" id="upzone" onclick="document.getElementById('fi').click()" ondragover="dov(event)"
+            ondrop="ddrop(event)" ondragleave="document.getElementById('upzone').classList.remove('drag')">
+            <span class="up-ico">📷</span>
+            <div class="up-title">Trascina o clicca per caricare</div>
+            <div class="up-sub">Foto di un <b>rifiuto, imballaggio o oggetto</b><br>
+              L'AI identifica il materiale e come smaltirlo<br>JPG · PNG · WEBP · GIF</div>
+          </div>
+          <input type="file" id="fi" accept="image/*" style="display:none" onchange="loadF(this.files[0])">
+        </div>
+        <div id="prev-wrap">
+          <div class="sbeam"></div>
+          <div class="sov">
+            <div class="sotxt">analisi in corso</div>
+          </div>
+          <img id="prev-img" src="" alt="">
+          <div class="imgbar">
+            <div class="imgbar-name" id="iname">pronto</div>
+            <div class="imgbar-meta" id="imeta"></div>
+          </div>
+        </div>
+        <div>
+          <div class="lbl">Azioni</div>
+          <div style="display:flex;gap:7px;">
+            <button class="btn btn-teal" id="abtn" onclick="analyze()" disabled
+              style="flex:1;justify-content:center;">🔍 Analizza con AI</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('ci').click()">📸</button>
+            <button class="btn btn-ghost" onclick="resetScan()">↩</button>
+          </div>
+          <input type="file" id="ci" accept="image/*" capture="environment" style="display:none"
+            onchange="loadF(this.files[0])">
+          <div class="errmsg" id="errmsg"></div>
+        </div>
+      </div>
+      <div class="panel panel-r">
+        <div class="lbl">Risultato AI</div>
+        <div class="ph" id="ph">
+          <div class="ph-ico">🤖</div>
+          <div class="ph-txt">Carica una foto e premi<br>Analizza per scoprire<br>come smaltire il rifiuto</div>
+        </div>
+        <div class="ldwrap" id="ldwrap">
+          <div class="ring"></div>
+          <div class="ldtxt">scansione in corso</div>
+        </div>
+        <div id="reswrap"></div>
+        <div id="histsec" style="display:none;">
+          <div class="lbl" style="margin-top:4px;">Storico</div>
+          <div class="hlist" id="hlist"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page on" id="pg-hl">
+      <div class="hl-bg"></div>
+
+      <div class="hl-scorebar">
+        <div class="hl-chip">
+          <div class="hl-chip-ico">⭐</div>
+          <span class="hl-chip-lbl">Punteggio</span>
+          <span class="hl-chip-val" id="hl-score">0</span>
+        </div>
+        <div class="hl-chip">
+          <div class="hl-chip-ico">🔥</div>
+          <span class="hl-chip-lbl">Serie</span>
+          <span class="hl-chip-val" id="hl-streak">0</span>
+        </div>
+        <div class="hl-chip">
+          <div class="hl-chip-ico">🏆</div>
+          <span class="hl-chip-lbl">Record</span>
+          <span class="hl-chip-val" id="hl-best">0</span>
+        </div>
+        <div class="hl-chip">
+          <div class="hl-chip-ico">❓</div>
+          <span class="hl-chip-lbl">Domanda</span>
+          <span class="hl-chip-val" id="hl-qnum">1</span>
+        </div>
+      </div>
+
+      <div class="hl-cats" id="hl-cats">
+        <button class="hl-cat-btn on" data-cat="all">🌍 Tutto</button>
+        <button class="hl-cat-btn" data-cat="co2">💨 CO₂</button>
+        <button class="hl-cat-btn" data-cat="decomp">⏳ Decomposizione</button>
+        <button class="hl-cat-btn" data-cat="riciclo">♻️ Riciclo</button>
+        <button class="hl-cat-btn" data-cat="acqua">💧 Acqua</button>
+        <button class="hl-cat-btn" data-cat="energia">⚡ Energia</button>
+      </div>
+
+      <div class="hl-arena" id="hl-arena">
+        <div class="hl-card-wrap" id="hl-card-l">
+          <div class="hl-card">
+            <img class="hl-card-bg" id="hl-l-img" src="" alt="">
+            <div class="hl-card-cat" id="hl-l-cat">CO₂</div>
+            <span class="hl-card-ico-emoji" id="hl-l-ico" style="display:none">✈️</span>
+            <div class="hl-card-name" id="hl-l-name">Volo Roma-NY</div>
+            <div class="hl-card-desc" id="hl-l-desc">Emissioni CO₂ per passeggero</div>
+            <div class="hl-value" id="hl-l-val">1.600</div>
+            <div class="hl-card-unit" id="hl-l-unit">kg di CO₂</div>
+          </div>
+        </div>
+
+        <div class="hl-vs">
+          <div class="hl-vs-line"></div>
+          <div class="hl-vs-label">VS</div>
+          <div class="hl-vs-line"></div>
+        </div>
+
+        <div class="hl-card-wrap" id="hl-card-r">
+          <div class="hl-card">
+            <img class="hl-card-bg" id="hl-r-img" src="" alt="">
+            <div class="hl-card-cat" id="hl-r-cat">CO₂</div>
+            <span class="hl-card-ico-emoji" id="hl-r-ico" style="display:none">🚗</span>
+            <div class="hl-card-name" id="hl-r-name">Auto per 1 anno</div>
+            <div class="hl-card-desc" id="hl-r-desc">Emissioni medie annue</div>
+            <div class="hl-hidden-val" id="hl-r-val">???</div>
+            <div class="hl-card-unit" id="hl-r-unit">kg di CO₂</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hl-btns" id="hl-btns">
+        <button class="hl-btn hl-btn-high" id="hl-high" onclick="guess('high')">▲ È Maggiore</button>
+        <button class="hl-btn hl-btn-low" id="hl-low" onclick="guess('low')">▼ È Minore</button>
+      </div>
+
+      <div class="hl-feedback" id="hl-fb">
+        <div class="hl-feedback-ico" id="hl-fb-ico">✅</div>
+        <div class="hl-feedback-txt">
+          <div id="hl-fb-msg"></div>
+          <div class="hl-fact" id="hl-fb-fact"></div>
+        </div>
+      </div>
+
+      <div class="hl-gameover" id="hl-go">
+        <div style="font-size:3rem">🌍</div>
+        <div class="hl-go-title">GAME OVER</div>
+        <div class="hl-go-score" id="hl-go-score">0</div>
+        <div class="hl-go-sub">PUNTI TOTALI</div>
+        <div class="hl-go-badges" id="hl-go-badges"></div>
+        <button class="hl-btn-restart" onclick="hlRestart()">🔄 Rigioca</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

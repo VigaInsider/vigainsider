@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="it">
+
+<head>
+  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raccogli i rifiuti</title>
+</head>
+
+<body>
+  <img src="Personaggio/1/davanti.png" alt="Personaggio" id="personaggio" draggable="false" />
+  <img src="Texture/freccia_1.png" alt="Freccia" id="freccia" draggable="false" />
+
+  <div id="minimappa" draggable="false">
+    <img src="Mappa/mappa.png" alt="Minimappa" id="map" draggable="false" />
+  </div>
+
+  <div id="inv" draggable="false">
+    <div id="pallino" draggable="false"></div>
+  </div>
+
+  <img id="proiettile" src="Texture/proiettile_1.png" alt="Proiettile" />
+
+  <div id="ui">
+    <div id="timerDisplay" style="font-size: 28px; font-weight: bold">
+      ⏱ 15s
+    </div>
+    <div id="scoreDisplay" style="font-size: 22px">Punti: 0</div>
+  </div>
+
+  <div id="tutorial" class="overlay">
+    <h1>🌿 Raccogli i rifiuti</h1>
+    <p>
+      USA <b>WASD</b> per muoverti e il <b>MOUSE</b> per mirare e sparare.<br />
+      Colpisci i rifiuti per guadagnare <b>tempo</b> e <b>punti</b>!<br />
+      I rifiuti <b style="color: gold">⭐ LEGGENDARI</b> appaiono sulla
+      minimappa e danno ricompense extra!<br /><br />
+    </p>
+    <button onclick="iniziaGioco()">▶ GIOCA</button>
+  </div>
+
+  <div id="gameOver" class="overlay" style="display: none">
+    <h1>⏰ Tempo Scaduto!</h1>
+    <div id="punteggioFinale" style="font-size: 28px; margin: 10px 0"></div>
+    <h2>🏆 Migliori Punteggi</h2>
+    <div id="classificaDiv" style="font-size: 20px; margin-bottom: 10px"></div>
+    <button onclick="riavvia()">🔄 RIGIOCA</button>
+  </div>
+
+  <script>
+    let molt = 1
+    let obiettivo = 0;
+    let difficolta = "";
+    let personaggio = document.getElementById("personaggio");
+    let freccia = document.getElementById("freccia");
+    let sopra = 50;
+    let sinistra = 50;
+    let w = false,
+      a = false,
+      s = false,
+      d = false;
+    let mouseX = 0,
+      mouseY = 0;
+    let sparando = false;
+    let proiettile = document.getElementById("proiettile");
+    let proiettileX = 0,
+      proiettileY = 0;
+    let proiettileDX = 0,
+      proiettileDY = 0;
+    let proiettileAttivo = false;
+    let proiettileTimeout = null;
+    let velocitaProiettile = 2000;
+    let giocoAttivo = false;
+
+    let tempoRimasto = 15;
+    let punteggio = 0;
+    let spawnAccumulato = 0;
+    let spawnIntervallo = 3;
+    let tempoTotaleGiocato = 0;
+
+    let rifiutiAttivi = [];
+
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    document.addEventListener("mousedown", () => {
+      spara();
+    });
+
+    const immagini = [];
+    for (let x = 0; x <= 2; x++) {
+      for (let y = 0; y <= 2; y++) {
+        const img = new Image();
+        img.src = `Mappa/1/frame_${x},${y}.png`;
+        immagini.push(img);
+      }
+    }
+
+    function iniziaGioco() {
+      document.getElementById("tutorial").style.display = "none";
+      giocoAttivo = true;
+      tempoRimasto = 15;
+      punteggio = 0;
+      spawnAccumulato = 0;
+      tempoTotaleGiocato = 0;
+      rifiutiAttivi = [];
+      ultimoTempo = 0;
+
+      obiettivo = Math.floor(Math.random() * 401) + 100;
+
+      let diffRand = Math.random();
+      if (diffRand < 0.33) {
+        difficolta = "facile";
+        velocita = 60;
+        velocitaProiettile = 1800;
+        molt = 1.2
+      } else if (diffRand < 0.66) {
+        difficolta = "media";
+        velocita = 70;
+        velocitaProiettile = 2000;
+        molt = 1
+      } else {
+        difficolta = "difficile";
+        velocita = 85;
+        velocitaProiettile = 2300;
+        molt = 0.8
+      }
+
+      alert("Obiettivo: " + obiettivo + " punti\nDifficoltà: " + difficolta);
+
+      aggiornaUI();
+      requestAnimationFrame(loop);
+    }
+
+    function riavvia() {
+      document.getElementById("gameOver").style.display = "none";
+      document.querySelectorAll(".rifiuto").forEach((r) => r.remove());
+      document
+        .querySelectorAll(".pallino-leggendario")
+        .forEach((r) => r.remove());
+      rifiutiAttivi = [];
+      sopra = 50;
+      sinistra = 50;
+      mappaX = Math.floor(Math.random() * 3);
+      mappaY = Math.floor(Math.random() * 3);
+      aggiornaFrame();
+      iniziaGioco();
+    }
+
+    let mappaX = Math.floor(Math.random() * 3);
+    let mappaY = Math.floor(Math.random() * 3);
+    aggiornaFrame();
+
+    function aggiornaFrame() {
+      document.body.style.backgroundImage = `url("Mappa/1/frame_${mappaX},${mappaY}.png")`;
+      togliProiettile1();
+      aggiornaRifiutiVisibili();
+    }
+
+    function aggiornaUI() {
+      document.getElementById("timerDisplay").textContent =
+        "⏱ " + Math.ceil(tempoRimasto) + "s";
+      document.getElementById("scoreDisplay").textContent =
+        "Punti: " + punteggio + " / " + obiettivo;
+      document.getElementById("timerDisplay").style.color =
+        tempoRimasto <= 5 ? "#ff4444" : "white";
+    }
+
+    document.addEventListener("keydown", (e) => {
+      let tasto = e.key.toLowerCase();
+      if (tasto === "w" || tasto === "arrowup") w = true;
+      if (tasto === "a" || tasto === "arrowleft") a = true;
+      if (tasto === "s" || tasto === "arrowdown") s = true;
+      if (tasto === "d" || tasto === "arrowright") d = true;
+      if (tasto === "m") nascondiMappa();
+    });
+
+    document.addEventListener("keyup", (e) => {
+      let tasto = e.key.toLowerCase();
+      if (tasto === "w" || tasto === "arrowup") w = false;
+      if (tasto === "a" || tasto === "arrowleft") a = false;
+      if (tasto === "s" || tasto === "arrowdown") s = false;
+      if (tasto === "d" || tasto === "arrowright") d = false;
+    });
+
+    let ultimoTempo = 0;
+    let velocita = 70;
+
+    function loop(tempo) {
+      if (!giocoAttivo) return;
+
+      if (ultimoTempo === 0) {
+        ultimoTempo = tempo;
+        requestAnimationFrame(loop);
+        return;
+      }
+
+      let delta = (tempo - ultimoTempo) / 1000;
+      if (delta > 0.1) delta = 0.1;
+      ultimoTempo = tempo;
+
+      tempoRimasto -= delta;
+      tempoTotaleGiocato += delta;
+
+      if (punteggio >= obiettivo) {
+        tempoRimasto = 0;
+        aggiornaUI();
+        fineGioco();
+        return;
+      }
+
+      if (tempoRimasto <= 0) {
+        tempoRimasto = 0;
+        aggiornaUI();
+        fineGioco();
+        return;
+      }
+      aggiornaUI();
+
+      spawnIntervallo = Math.max(0.8, 3 - tempoTotaleGiocato * 0.05);
+      spawnAccumulato += delta;
+      if (spawnAccumulato >= spawnIntervallo) {
+        creaRifiuto();
+        spawnAccumulato = 0;
+      }
+
+      let movX = 0,
+        movY = 0;
+      if (w) {
+        movY -= 1;
+        personaggio.src = "Personaggio/1/davanti.png";
+        personaggio.style.scale = 1;
+      }
+      if (s) {
+        movY += 1;
+        personaggio.src = "Personaggio/1/indietro.png";
+        personaggio.style.scale = 1.15;
+      }
+      if (a) {
+        movX -= 1;
+        personaggio.style.transform = "scaleX(-1)";
+      }
+      if (d) {
+        movX += 1;
+        personaggio.style.transform = "scaleX(1)";
+      }
+
+      let lunghezza = Math.sqrt(movX * movX + movY * movY);
+      if (lunghezza > 0) {
+        movX /= lunghezza;
+        movY /= lunghezza;
+      }
+
+      sinistra += movX * velocita * delta;
+      sopra += movY * velocita * delta;
+
+      if (sinistra <= -3) {
+        cambiaSfondo(1);
+      } else if (sinistra >= 99) {
+        cambiaSfondo(2);
+      }
+      if (sopra <= -6) {
+        cambiaSfondo(3);
+      } else if (sopra >= 96) {
+        cambiaSfondo(4);
+      }
+
+      personaggio.style.top = sopra + "%";
+      personaggio.style.left = sinistra + "%";
+      freccia.style.top = sopra + "%";
+      freccia.style.left = sinistra + "%";
+
+      let sin = (sinistra + mappaX * 100) / 3;
+      document.getElementById("pallino").style.left = sin + "%";
+      let sop = (Math.abs(sopra - 95) + mappaY * 100) / 3 - 2;
+      document.getElementById("pallino").style.bottom = sop + "%";
+
+      if (sopra <= 19 && sinistra <= 14.5) {
+        document.getElementById("map").style.opacity = "0.6";
+        document.getElementById("minimappa").style.opacity = "0.8";
+      } else {
+        document.getElementById("map").style.opacity = "1";
+        document.getElementById("minimappa").style.opacity = "1";
+      }
+
+      let rect = personaggio.getBoundingClientRect();
+      let playerX = rect.left + rect.width / 2;
+      let playerY = rect.top + rect.height / 2;
+      let angolo = Math.atan2(mouseY - playerY, mouseX - playerX);
+
+      freccia.style.left = playerX + "px";
+      freccia.style.top = playerY + "px";
+
+      let orizzontale = ((Math.cos(angolo) + 1) / 2) * 250 - 180;
+      let verticale = ((Math.sin(angolo) + 1) / 2) * 250 - 170;
+      freccia.style.transform = `translate(${orizzontale}%, ${verticale}%) rotate(${angolo}rad)`;
+
+      if (proiettileAttivo) {
+        proiettileX += proiettileDX * velocitaProiettile * delta;
+        proiettileY += proiettileDY * velocitaProiettile * delta;
+        proiettile.style.left = proiettileX + "px";
+        proiettile.style.top = proiettileY + "px";
+        controllaCollisioni();
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    personaggio.style.transform = "scaleX(1)";
+
+    let immaginiRifiuti = [
+      "Texture/rifiuto_1.png",
+      "Texture/rifiuto_2.png",
+      "Texture/rifiuto_3.png",
+      "Texture/rifiuto_4.png",
+      "Texture/rifiuto_5.png",
+      "Texture/rifiuto_6.png",
+    ];
+
+    function creaRifiuto() {
+      let q = mappaY * 3 + mappaX;
+
+      let minDist = 10;
+      let maxDist = Math.min(35 + tempoTotaleGiocato * 0.5, 45);
+
+      let angRandom = Math.random() * Math.PI * 2;
+      let dist = minDist + Math.random() * (maxDist - minDist);
+      let rx = 50 + Math.cos(angRandom) * dist;
+      let ry = 50 + Math.sin(angRandom) * dist;
+      rx = Math.max(5, Math.min(92, rx));
+      ry = Math.max(5, Math.min(92, ry));
+
+      let leggendario = Math.random() < 0.03;
+
+      let imgSrc =
+        immaginiRifiuti[Math.floor(Math.random() * immaginiRifiuti.length)];
+
+      let el = document.createElement("img");
+      el.className =
+        "rifiuto " +
+        (leggendario ? "rifiuto-leggendario" : "rifiuto-normale");
+      el.src = imgSrc;
+      el.style.left = rx + "%";
+      el.style.top = ry + "%";
+      el.dataset.quadrante = q;
+      el.draggable = false;
+      document.body.appendChild(el);
+
+      let pallinoMappa = null;
+      if (leggendario) {
+        pallinoMappa = document.createElement("div");
+        pallinoMappa.className = "pallino-leggendario";
+        pallinoMappa.dataset.quadrante = q;
+        let sinMappa = (rx + (q % 3) * 100) / 3;
+        let sopMappa = (Math.abs(ry - 95) + Math.floor(q / 3) * 100) / 3 - 2;
+        pallinoMappa.style.left = sinMappa + "%";
+        pallinoMappa.style.bottom = sopMappa + "%";
+        document.getElementById("inv").appendChild(pallinoMappa);
+      }
+
+      rifiutiAttivi.push({
+        el,
+        x: rx,
+        y: ry,
+        quadrante: q,
+        leggendario,
+        pallinoMappa,
+      });
+      aggiornaRifiutiVisibili();
+    }
+
+    function aggiornaRifiutiVisibili() {
+      let qCorrente = mappaY * 3 + mappaX;
+      rifiutiAttivi.forEach((r) => {
+        r.el.style.display = r.quadrante == qCorrente ? "block" : "none";
+      });
+    }
+
+    function controllaCollisioni() {
+      if (!proiettileAttivo) return;
+      let qCorrente = mappaY * 3 + mappaX;
+
+      for (let i = rifiutiAttivi.length - 1; i >= 0; i--) {
+        let r = rifiutiAttivi[i];
+        if (r.quadrante != qCorrente) continue;
+
+        let rectR = r.el.getBoundingClientRect();
+        if (rectR.width === 0) continue;
+
+        if (
+          proiettileX >= rectR.left &&
+          proiettileX <= rectR.right &&
+          proiettileY >= rectR.top &&
+          proiettileY <= rectR.bottom
+        ) {
+          if (r.pallinoMappa) r.pallinoMappa.remove();
+          r.el.remove();
+          rifiutiAttivi.splice(i, 1);
+
+          if (proiettileTimeout) {
+            clearTimeout(proiettileTimeout);
+            proiettileTimeout = null;
+          }
+          togliProiettile2();
+
+          if (r.leggendario) {
+            temp = 5 * molt;
+            temp = Number(temp.toFixed(1))
+            tempoRimasto += temp;
+            punteggio += 15;
+            mostraFlash(
+              `⭐ LEGGENDARIO!  +${temp}s  +15pts`,
+              rectR.left + rectR.width / 2,
+              rectR.top,
+              true,
+            );
+          } else {
+            temp = 2 * molt;
+            temp = Number(temp.toFixed(1))
+            tempoRimasto += temp;
+            punteggio += 3;
+            mostraFlash(
+              `+${temp}s  +3pts`,
+              rectR.left + rectR.width / 2,
+              rectR.top,
+              false,
+            );
+          }
+          aggiornaUI();
+          break;
+        }
+      }
+    }
+
+    function spara() {
+      if (!giocoAttivo) return;
+      if (proiettileAttivo) return;
+
+      proiettileAttivo = true;
+
+      let rectFreccia = freccia.getBoundingClientRect();
+      let centroX = rectFreccia.left + rectFreccia.width / 2;
+      let centroY = rectFreccia.top + rectFreccia.height / 2;
+
+      let angolo = Math.atan2(mouseY - centroY, mouseX - centroX);
+
+      proiettileX = centroX;
+      proiettileY = centroY;
+      proiettileDX = Math.cos(angolo);
+      proiettileDY = Math.sin(angolo);
+
+      proiettile.style.left = proiettileX + "px";
+      proiettile.style.top = proiettileY + "px";
+      proiettile.style.transform = `rotate(${angolo}rad)`;
+      proiettile.style.display = "block";
+
+      if (proiettileTimeout) clearTimeout(proiettileTimeout);
+      proiettileTimeout = setTimeout(togliProiettile2, 1000);
+    }
+
+    function mostraFlash(testo, x, y, leggendario) {
+      let el = document.createElement("div");
+      el.textContent = testo;
+      el.style.cssText = `
+          position: fixed; left: ${x}px; top: ${y}px;
+          color: ${leggendario ? "gold" : "#ffe800"}; font-weight: bold;
+          font-size: ${leggendario ? "22px" : "18px"};
+          text-shadow: 1px 1px 4px black; pointer-events: none;
+          z-index: 500; transform: translate(-50%, -50%);
+          transition: top 0.9s, opacity 0.9s; opacity: 1;
+        `;
+      document.body.appendChild(el);
+      setTimeout(() => {
+        el.style.top = y - 50 + "px";
+        el.style.opacity = "0";
+      }, 50);
+      setTimeout(() => el.remove(), 1000);
+    }
+
+    function fineGioco() {
+      giocoAttivo = false;
+      sparando = false;
+      proiettile.style.display = "none";
+
+      let classifica = JSON.parse(localStorage.getItem("classifica") || "[]");
+      classifica.push(punteggio);
+      classifica.sort((a, b) => b - a);
+      classifica = classifica.slice(0, 5);
+      localStorage.setItem("classifica", JSON.stringify(classifica));
+
+      let risultato = punteggio >= obiettivo ? "✅ OBIETTIVO RAGGIUNTO!" : "❌ OBIETTIVO FALLITO";
+
+      document.getElementById("punteggioFinale").textContent =
+        risultato + " - " + punteggio + " pts";
+
+      let html = "";
+      classifica.forEach((p, i) => {
+        let medal = ["🥇", "🥈", "🥉", "4.", "5."][i];
+        html += `<div>${medal} ${p} pts</div>`;
+      });
+
+      document.getElementById("classificaDiv").innerHTML = html;
+      document.getElementById("gameOver").style.display = "flex";
+    }
+
+    function togliProiettile1() {
+      if (proiettileTimeout) {
+        clearTimeout(proiettileTimeout);
+        proiettileTimeout = null;
+      }
+      proiettileAttivo = false;
+      proiettile.style.display = "none";
+      sparando = false;
+      proiettileX = 0;
+      proiettileY = 0;
+      proiettileDX = 0;
+      proiettileDY = 0;
+    }
+
+    function togliProiettile2() {
+      proiettileTimeout = null;
+      proiettileAttivo = false;
+      proiettile.style.display = "none";
+      proiettileX = 0;
+      proiettileY = 0;
+      proiettileDX = 0;
+      proiettileDY = 0;
+    }
+
+    function cambiaSfondo(direzione) {
+      switch (direzione) {
+        case 1:
+          if (mappaX > 0) {
+            mappaX -= 1;
+            sinistra = 98;
+            aggiornaFrame();
+          } else {
+            sinistra = -2;
+          }
+          break;
+        case 2:
+          if (mappaX < 2) {
+            mappaX += 1;
+            sinistra = -2;
+            aggiornaFrame();
+          } else {
+            sinistra = 98;
+          }
+          break;
+        case 3:
+          if (mappaY < 2) {
+            mappaY += 1;
+            sopra = 95;
+            aggiornaFrame();
+          } else {
+            sopra = -5;
+          }
+          break;
+        case 4:
+          if (mappaY > 0) {
+            mappaY -= 1;
+            sopra = -5;
+            aggiornaFrame();
+          } else {
+            sopra = 95;
+          }
+          break;
+      }
+    }
+
+    let nascosta = false;
+    function nascondiMappa() {
+      if (!nascosta) {
+        document.getElementById("minimappa").style.display = "none";
+        document.getElementById("map").style.display = "none";
+        document.getElementById("pallino").style.display = "none";
+        document.getElementById("inv").style.display = "none";
+        nascosta = true;
+      } else {
+        document.getElementById("minimappa").style.display = "block";
+        document.getElementById("map").style.display = "block";
+        document.getElementById("pallino").style.display = "block";
+        document.getElementById("inv").style.display = "block";
+        nascosta = false;
+      }
+    }
+  </script>
+</body>
+
+</html>

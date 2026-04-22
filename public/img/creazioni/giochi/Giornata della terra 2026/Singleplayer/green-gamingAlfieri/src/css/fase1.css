@@ -1,0 +1,391 @@
+/* --- VARIABILI GLOBALI --- */
+:root {
+    --green-bright: #2ecc71;
+    --green-glow: rgba(46, 204, 113, 0.6);
+    --glass-bg: rgba(0, 0, 0, 0.7);
+    --glass-border: rgba(46, 204, 113, 0.3);
+    --top: 10px;
+    --border: 20px;
+    --text: 1.5rem;
+}
+
+/* --- RESET E BODY --- */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #000;
+    color: white;
+}
+
+/* --- HUD DI GIOCO (Punti e Tempo) --- */
+#punti, #tempo {
+    position: absolute;
+    top: var(--top);
+    color: white;
+    font-size: var(--text);
+    pointer-events: none;
+    display: none;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px var(--green-glow);
+    font-weight: bold;
+    z-index: 50;
+}
+
+#punti { left: var(--border); }
+#tempo { right: var(--border); }
+#fps-counter {
+    position: absolute;
+    top: var(--top); /* Usa la stessa variabile degli altri */
+    left: 50%;
+    transform: translateX(-50%); /* Lo centra perfettamente */
+    color: var(--green-bright);
+    font-size: 1.2rem; /* Leggermente più piccolo dei punti per non distrarre */
+    font-family: monospace;
+    pointer-events: none;
+    display: none; /* Verrà mostrato insieme agli altri al lock() */
+    text-shadow: 0 0 10px var(--green-glow);
+    z-index: 50;
+}
+
+/* --- MIRINO (Crosshair) --- */
+#crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--green-bright);
+    font-size: 24px;
+    pointer-events: none;
+    display: none;
+    z-index: 10;
+    text-shadow: 0 0 5px #000;
+}
+
+/* --- SCHERMATA DI CARICAMENTO (MATRIX) --- */
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+#matrix-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+}
+
+.loader-content {
+    position: relative;
+    z-index: 10;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.eco-title {
+    font-family: 'Courier New', monospace;
+    color: var(--green-bright);
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px var(--green-glow);
+}
+
+.bar-container {
+    width: 100%;
+    background: #222 !important;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 20;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+#loading-bar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--green-bright) !important;
+    box-shadow: 0 0 20px var(--green-bright);
+    transition: width 0.3s ease-out;
+}
+
+#loading-text {
+    color: var(--green-bright);
+    font-family: monospace;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+/* --- POPUP INSERIMENTO USERNAME --- */
+/* Overlay con sfocatura profonda */
+#name-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: radial-gradient(circle, rgba(0, 20, 10, 0.7) 0%, rgba(0, 0, 0, 0.95) 100%);
+    backdrop-filter: blur(12px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenitore Popup */
+.name-popup {
+    background: rgba(10, 15, 12, 0.85);
+    border: 2px solid var(--green-bright);
+    padding: 3rem;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(46, 204, 113, 0.2), inset 0 0 20px rgba(46, 204, 113, 0.1);
+    max-width: 450px;
+    width: 90%;
+    transform: translateY(20px);
+    animation: popupFadeIn 0.6s ease forwards;
+    border-top: 5px solid var(--green-bright); /* Accento superiore */
+}
+
+@keyframes popupFadeIn {
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.name-popup h3 {
+    color: var(--green-bright);
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 900;
+    text-shadow: 0 0 10px var(--green-glow);
+}
+
+.name-popup p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+/* Input stilizzato */
+#username-input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    outline: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+}
+
+#username-input:focus {
+    border-color: var(--green-bright);
+    box-shadow: 0 0 15px var(--green-glow);
+    background: rgba(46, 204, 113, 0.05);
+}
+
+/* Pulsante di conferma */
+#confirm-name-btn {
+    width: 100%;
+    background: var(--green-bright);
+    color: #002b12;
+    border: none;
+    padding: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#confirm-name-btn:hover {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 25px #fff;
+    transform: scale(1.03);
+}
+
+/* Effetto errore (scuotimento) */
+.shake {
+    animation: shakeAnim 0.4s ease;
+}
+
+@keyframes shakeAnim {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* --- SCHERMATA INIZIALE (START) --- */
+/* L'overlay serve come ulteriore strato di colore per far leggere bene i testi */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Assicurati che il contenitore start non mostri lo scale dell'immagine fuori dai bordi */
+#start {
+    position: absolute;
+    inset: 0;
+    overflow: hidden; /* Fondamentale per il trucco dello scale */
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+#bg-island {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    /* Effetto sfocatura e luminosità ridotta */
+    filter: blur(6px) brightness(0.5);
+    /* Lo scale(1.1) serve a "ingrandire" l'immagine quel tanto che basta 
+       per nascondere i bordi sfocati che altrimenti diventerebbero bianchi */
+    transform: scale(1.1);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Titolo Missione */
+.top-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+}
+
+.main-title {
+    width: 25%;
+    height: auto;
+    filter: drop-shadow(0 0 15px var(--green-bright));
+}
+
+/* Layout a Tre Colonne */
+.bottom-section {
+    flex: 1.5;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    padding: 0 5%;
+    gap: 20px;
+}
+
+.item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+/* Box con effetto Vetro (Glassmorphism) */
+.controls-box, .instructions-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 25px;
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 350px;
+}
+
+.controls-box h3, .instructions-box h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    text-align: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+}
+
+.controls-box p, .instructions-box p {
+    margin: 8px 0;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* Tasti Tastiera */
+kbd {
+    background-color: #333;
+    border: 1px solid var(--green-bright);
+    color: var(--green-bright);
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    box-shadow: 0 0 5px var(--green-glow);
+}
+
+/* Testo Pulsante Centrale */
+.pulse-text {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow: 0 0 15px var(--green-bright);
+    cursor: pointer;
+    animation: pulse 2s infinite;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive per schermi piccoli */
+@media (max-width: 900px) {
+    .bottom-section {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+        padding-bottom: 40px;
+    }
+    .main-title { width: 50%; }
+}

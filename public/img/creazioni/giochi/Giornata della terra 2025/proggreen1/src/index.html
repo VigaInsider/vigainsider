@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>acchiappa la spazzatura!</title>
+	</head>
+	<body>
+		<style>
+			#title {
+				color: white;
+				background-color: grey;
+				border-radius: 10px 0 10px 0;
+				width: 35vw;
+				margin: auto;
+				text-align: center;
+			}
+			.spazzatura {
+				background-size: contain;
+				background-repeat: no-repeat;
+			}
+			#game {
+				position: fixed;
+				padding: 10px;
+				background-color: gray;
+				border-radius: 20px;
+				display: flex;
+				justify-content: center;
+				opacity: 0.5;
+			}
+			body {
+				font-family: sans-serif;
+				overflow-y: hidden;
+				overflow-x: hidden;
+				background-image: url("assets/cityimg.png");
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-position: center;
+			}
+			#cursor {
+				position: absolute;
+				width: 5vw;
+				height: 5vw;
+				background-image: url(assets/trash-can-chiuso.png);
+				background-size: contain;
+				background-repeat: no-repeat;
+			}
+		</style>
+		<div id="title">
+			<h1>
+				Score <span id="score"></span> Streak <span id="streak"></span> Loss
+				<span id="loss"></span>
+			</h1>
+		</div>
+		<div id="cursor"></div>
+		<div id="game"></div>
+
+		<script src="myjs.js"></script>
+	</body>
+</html>

@@ -1,0 +1,5 @@
+{
+    "name": "Trash collector",
+    "descrizione" : "Raccogli la spazzatura in tempo",
+    "index": "src/index.html"
+}

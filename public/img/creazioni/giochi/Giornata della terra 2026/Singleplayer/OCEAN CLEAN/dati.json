@@ -1,0 +1,5 @@
+{
+    "name": "Ocean Clean",
+    "descrizione": "Controlla il drone e pulisci l'oceano raccogliendo i rifiuti. Evita gli ostacoli e cerca di raggiungere il punteggio più alto possibile!",
+    "index": "src/home.html"
+}

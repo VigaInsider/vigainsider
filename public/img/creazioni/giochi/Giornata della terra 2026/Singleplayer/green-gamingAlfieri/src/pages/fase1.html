@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Semplice Island FPS</title>
+    <link rel="stylesheet" href="css/fase1.css">
+</head>
+<body>
+    <!-- SCHERMATA DI CARICAMENTO -->
+    <div id="loading-screen">
+        <canvas id="matrix-canvas"></canvas>
+        <div class="loader-content">
+            <div class="eco-title">SAVE THE ISLAND</div>
+            <div class="bar-container">
+                <div id="loading-bar"></div>
+            </div>
+            <div id="loading-text">Caricamento delle risorse...</div>
+        </div>
+    </div>
+
+    <!-- POPUP INSERIMENTO USERNAME -->
+     <div id="name-popup-overlay">
+        <div class="name-popup">
+            <h3>IDENTIFICAZIONE GIOCATORE</h3>
+            <p>Inserisci il tuo nome per iniziare a giocare:</p>
+            <input type="text" id="username-input" placeholder="Nome Giocatore..." maxlength="15">
+            <button id="confirm-name-btn">ACCEDI AL GIOCO</button>
+        </div>
+    </div>
+
+    <!-- SCHERMATA INIZIALE -->
+    <div id="start">
+        <img src="assets/media/img/sfondo_iniziale.png" alt="Sfondo Isola" id="bg-island">
+        <div class="overlay"></div>
+        <div class="content">
+            <header class="top-section">
+                <img src="assets/media/img/titolo.png" alt="Eco-Mission" class="main-title" />
+            </header>
+            <main class="bottom-section">
+                <section class="item side-panel">
+                    <div class="glass-box">
+                        <h3>Controlli</h3>
+                        <div class="control-list">
+                            <p><kbd>Freccia su / W</kbd> Avanti</p>
+                            <p><kbd>Freccia giù / S</kbd> Indietro</p>
+                            <p><kbd>Freccia destra / D</kbd> Destra</p>
+                            <p><kbd>Freccia sinistra / A</kbd> Sinistra</p>
+                            <p><kbd>Mouse</kbd> Punto di vista</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="item center-panel">
+                    <div class="pulse-text" id="btn-start">Clicca per giocare</div>
+                </section>
+                <section class="item side-panel">
+                    <div class="glass-box">
+                        <h3>Istruzioni</h3>
+                        <p><strong>Obiettivo:</strong> raccogliere tutti i rifiuti sull’isola</p>
+                        <p>Attenzione allo scadere del tempo!</p>
+                        <p>Usa i comandi per esplorare e ripulire</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- INTERFACCIA GRAFICA DEL GIOCO -->
+    <div id="punti">Rifiuti: <span id="score">0</span></div>
+    <div id="fps-counter">FPS: 0</div>
+    <div id="tempo">Tempo: <span id="minuti">XX</span>:<span id="secondi">XX</span></div>
+    <div id="crosshair">+</div>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="js/fase1.js"></script>
+    <script src="js/loadingScreen.js"></script>
+</body>
+</html>

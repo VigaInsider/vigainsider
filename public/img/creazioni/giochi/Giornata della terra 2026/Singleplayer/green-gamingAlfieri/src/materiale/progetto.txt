@@ -1,0 +1,8 @@
+Nome gioco: Pulisci il mondo
+
+posizioni: 20 posizioni predefinite scelte random
+tempo 1° fase: 1m
+tempo 2° fase: 5s * punteggio
+schermata iniziale: click + controlli + bckg trailer (loop video) + titolo
+schermata intermedia: istruzioni
+schermata finale: punteggio finale + record + classifica(?)

@@ -1,0 +1,125 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game-container {
+    /*width: 1000px;
+    height: 600px;*/
+    width: 90vw;
+    height: 90vh;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+    border: 5px solid #333;
+    margin: 0 auto;
+    cursor: default;
+}
+
+/* Area dei bidoni */
+#bins-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Effetto bagliore per risposta corretta (Verde) */
+.glow-success {
+    box-shadow: 0 0 30px 15px rgba(0, 255, 0, 0.6);
+    border-radius: 50%; /* Rende l'effetto ovale/circolare */
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Effetto bagliore per risposta errata (Rosso) */
+.glow-error {
+    box-shadow: 0 0 30px 15px rgba(255, 0, 0, 0.6);
+    border-radius: 50%;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.bin img {
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+
+    /* Questa riga è la magia: */
+    mix-blend-mode: screen;
+
+    /* 'screen' mantiene i colori chiari e rende invisibile il nero.
+       In questo modo il bagliore dietro passerà attraverso le zone nere. */
+}
+
+
+/* Modifica leggera al bagliore per renderlo più visibile sotto il bidone */
+.bin::after {
+    content: "";
+    position: absolute;
+    top: 60%; /* Abbassato un po' per centrarsi meglio sulla base del bidone */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 100px; /* Più largo che alto per un effetto ovale perfetto */
+    border-radius: 50%;
+    opacity: 0;
+    filter: blur(10px); /* Sfuma i bordi della luce */
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+/* Stato Successo (Verde) */
+.glow-success::after {
+    opacity: 1;
+    box-shadow: 0 0 40px 20px rgba(0, 255, 0, 0.7);
+    background-color: rgba(0, 255, 0, 0.2); /* Opzionale: un leggero centro colorato */
+}
+
+/* Stato Errore (Rosso) */
+.glow-error::after {
+    opacity: 1;
+    box-shadow: 0 0 40px 20px rgba(255, 0, 0, 0.7);
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.bin img {
+    width: 100%;
+    height: auto;
+    pointer-events: none; /* Impedisce che il mouse "prenda" l'immagine del bidone */
+}
+
+/* I rifiuti */
+.trash {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    position: absolute;
+    z-index: 100;
+}
+.trash:active {
+    cursor: grabbing;
+}
+/* Il bancone marrone in basso */
+#counter {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background-color: #5d4037;
+    /* Colore marrone bancone */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Area UI (Punti e Tempo) */
+#ui {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+

@@ -1,0 +1,5 @@
+Indirizzi:
+    DB: localhost
+    web:
+        docker-xampp: http://[url]:[porta]/www/
+        xampp locale: http://localhost:[porta]/

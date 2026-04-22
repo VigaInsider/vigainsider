@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco di Riciclo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div id="punteggio">Punteggio: 0</div>
+    <div id="timer">Tempo: 45</div>
+    <div id="pauseMessage" class="pause-message">Pausa - Premi ESC per riprendere</div>
+
+    <div id="rulesSection" class="rules-section">
+        <h2>Regole del Gioco</h2>
+        <p>Trascina i rifiuti nei cestini giusti per aumentare il punteggio.</p>
+        <p>Premi ESC per iniziare il gioco o mettere in pausa.</p>
+    </div>
+
+    <div id="gameOver" class="game-over" style="display: none;">
+        <h2>Partita finita!</h2>
+        <p id="finalScore">Punteggio finale: 0</p>
+        <input type="text" id="playerName" placeholder="Inserisci il tuo nome">
+        <button id="saveScoreButton">Salva il punteggio</button>
+    </div>
+
+    <div id="classifica">
+        <h2>Classifica</h2>
+        <ul id="leaderboard">
+            <!-- Classifica aggiornata qui -->
+        </ul>
+    </div>
+
+    <img id="cestinoPlastica"
+        src="modello-di-clipart-dell-illustrazione-dell-icona-del-cestino-dei-rifiuti-di-plastica_19104-354-fotor-bg-remover-20250312132937.png"
+        alt="">
+    <img id="cestinoUmido"
+        src="rubbish-bins-waste-paper-baskets-recycling-bin-plastic-recycling-png-favpng-fgHLuexvr4SWCQmQfYyih70XW-fotor-bg-remover-20250402131924.png"
+        alt="">
+    <img id="cestinoCarta" src="carta cestino-fotor-bg-remover-20250402133546.png" alt="">
+    <img id="cestinoVetro" src="cestino vetro-fotor-bg-remover-20250402134144.png" alt="">
+</body>
+
+</html>

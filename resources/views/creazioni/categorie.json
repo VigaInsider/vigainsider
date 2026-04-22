@@ -1,0 +1,82 @@
+{
+    "Giornata della terra 2026 - Multiplayer": [
+        {
+            "cartella": "Giornata della terra 2026/Multiplayer/Memory(GheraPreda)",
+            "nome": "Memory"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Multiplayer/TrashNautica",
+            "nome": "Trash Nautica"
+        }
+    ],
+    "Giornata della terra 2026 - Singleplayer": [
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/BruskePennatiBressiFede",
+            "nome": "Recycle Dash"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/Lavoro green",
+            "nome": "Quiz Green"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/OCEAN CLEAN",
+            "nome": "Ocean Clean"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/Petrovic",
+            "nome": "WasteScanner AI"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/PietroGalbuseraManzoniSoponos",
+            "nome": "Eco-Warrior: Extreme Edition"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/ProgettoEdCivica",
+            "nome": "Fai la raccolta differenziata!"
+        },
+        {
+            "cartella": "Giornata della terra 2026/Singleplayer/green-gamingAlfieri",
+            "nome": "Save the island"
+        }
+    ],
+    "Minigiochi": [
+        {
+            "cartella": "Minigiochi/BrickBreaker",
+            "nome": "Brick Breaker"
+        },
+        {
+            "cartella": "Minigiochi/TombOfTheMask",
+            "nome": "Tomb of the Mask"
+        },
+        {
+            "cartella": "Minigiochi/pixelart",
+            "nome": "Pixel Art"
+        }
+    ],
+    "Giornata della terra 2025": [
+        {
+            "cartella": "Giornata della terra 2025/proggreen0",
+            "nome": "Raccolta differenziata"
+        },
+        {
+            "cartella": "Giornata della terra 2025/proggreen1",
+            "nome": "Acchiappa la spazzatura!"
+        },
+        {
+            "cartella": "Giornata della terra 2025/proggreen2",
+            "nome": "Trash collector"
+        },
+        {
+            "cartella": "Giornata della terra 2025/proggreen3",
+            "nome": "Ricicla"
+        },
+        {
+            "cartella": "Giornata della terra 2025/proggreen4",
+            "nome": "Minigames ecologici"
+        },
+        {
+            "cartella": "Giornata della terra 2025/proggreen5",
+            "nome": "Aura farming"
+        }
+    ]
+}

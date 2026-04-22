@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Istruzioni fase 2</title>
+        <link rel="stylesheet" href="css/istruzioniFase2.css">
+    </head>
+    <body>
+        <div id="start-fase2">
+            <div class="overlay-gradient"></div>
+            <div class="content">
+                <div class="top-section">
+                    <h1>Istruzioni fase 2</h1>
+                </div>
+                <div class="container bottom-section">
+                    <div class="item left">
+                        <div class="controls-box">
+                            <h3>Controlli</h3>
+                            <p><kbd>Mouse</kbd> Per trascinare i rifiuti nei cestini</p>
+                        </div>
+                    </div>
+                    <div class="item center">
+                        <span class="pulse-text" id="btn-start-f2">Clicca per giocare</span>
+                    </div>
+                    <div class="item right">
+                        <div class="instructions-box">
+                            <h3>Istruzioni</h3>
+                            <p>
+                                Hai <b><i id="tempo-f2-val">--</i></b> secondi per completare il livello
+                                <br>
+                                Hai raccolto <b><i id="punti-f2-val">--</i></b> rifiuti nella fase precedente
+                                <br>
+                                <b>Obiettivo:</b> separare correttamente i rifiuti nei cestini corrispondenti
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script defer>
+            const punti = localStorage.getItem('punteggioFase1') || 0;
+            document.getElementById('punti-f2-val').textContent = punti;
+            document.getElementById('tempo-f2-val').textContent = punti * 5; // 5 secondi per ogni rifiuto raccolto nella fase 1
+            document.getElementById('btn-start-f2').style.cursor = 'pointer';
+            const schermata = document.getElementById('start-fase2');
+            schermata.style.display = 'flex';
+
+            // Listener per il pulsante centrale
+            document.getElementById('btn-start-f2').onclick = function() {
+                schermata.style.opacity = '0';
+                schermata.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    schermata.style.display = 'none';
+                    window.location = '?pagina=sep';
+                }, 500);
+            };
+        </script>
+    </body>
+</html>

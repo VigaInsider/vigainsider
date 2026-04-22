@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Green - Ruota Interattiva</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <h1>Quiz Green</h1>
+
+    <div class="team-container">
+      <div id="team1" class="team">Squadra 1<br><span id="score1">0</span></div>
+      <div id="team2" class="team">Squadra 2<br><span id="score2">0</span></div>
+    </div>
+
+    <div id="main-content">
+      <div id="wheel-container">
+        <div id="pointer"></div>
+        <div id="wheel">
+          <div class="label" style="--i:0">Cambiamento climatico</div>
+          <div class="label" style="--i:1">Biodiversità</div>
+          <div class="label" style="--i:2">Inquinamento</div>
+          <div class="label" style="--i:3">Energia rinnovabile</div>
+          <div class="label" style="--i:4">Agricoltura sostenibile</div>
+          <div class="label" style="--i:5">Gestione risorse</div>
+          <div class="label" style="--i:6">Sostenibilità urbana</div>
+          <div class="label" style="--i:7">Politiche ambientali</div>
+          <div class="label" style="--i:8">Economia circolare</div>
+          <div class="label" style="--i:9">Trasporti sostenibili</div>
+          <div class="label" style="--i:10">Economia verde</div>
+          <div class="label" style="--i:11">Rifiuti e gestione</div>
+        </div>
+      </div>
+
+      <div id="question-panel">
+        <button id="spin-button" onclick="spinWheel()">Gira la Ruota</button>
+        <h3 id="question"></h3>
+        <div id="difficulty-buttons">
+          <button class="diff-btn" onclick="submitQuestion(1)">Difficoltà 1</button>
+          <button class="diff-btn" onclick="submitQuestion(2)">Difficoltà 2</button>
+          <button class="diff-btn" onclick="submitQuestion(3)">Difficoltà 3</button>
+          <button class="diff-btn" onclick="submitQuestion(4)">Difficoltà 4</button>
+          <button class="diff-btn" onclick="submitQuestion(5)">Difficoltà 5</button>
+        </div>
+        <div id="answers-container"></div>
+        <div id="message-container"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+
+  </body>
+</html>

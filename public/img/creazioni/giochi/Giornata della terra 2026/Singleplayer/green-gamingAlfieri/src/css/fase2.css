@@ -1,0 +1,156 @@
+/* --- VARIABILI GLOBALI --- */
+:root {
+    --bg-light: #f8fafc;
+    --text-dark: #1e293b;
+    --green-eco: #10b981;
+    --red-alert: #ef4444;
+    --counter-top: #334155;
+}
+
+/* --- RESET BASE --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- UI SUPERIORE (Punti e Tempo) --- */
+#ui {
+    margin-top: 20px;
+    padding: 12px 40px;
+    background: white;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    z-index: 1000;
+}
+
+#ui span {
+    color: var(--green-eco);
+}
+
+/* --- CONTAINER GIOCO --- */
+#game-container {
+    width: 92vw;
+    height: 82vh;
+    background-color: #000; /* Fondo nero per il mix-blend-mode */
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    margin: 20px auto;
+    border: 8px solid white; /* Cornice stile tablet */
+}
+
+/* --- AREA DEI BIDONI (Ingranditi) --- */
+#bins-container {
+    display: flex;
+    justify-content: center; /* Centra i bidoni */
+    gap: 12px;               /* Spazio tra i bidoni */
+    align-items: flex-end;
+    padding: 30px 20px;
+    width: 100%;
+    height: 72%;             /* Più spazio verticale per cestini grandi */
+    box-sizing: border-box;
+}
+
+.bin {
+    position: relative;
+    /* Ingrandimento: ora i bidoni occupano fino al 20% della larghezza */
+    width: 20%; 
+    max-width: 200px; 
+    min-width: 140px;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bin:hover {
+    transform: scale(1.08) translateY(-10px);
+}
+
+/* Gestione immagini con sfondo nero e scritta interna */
+.bin img {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: screen; /* Rende il nero dell'immagine trasparente */
+    pointer-events: none;
+    z-index: 2;
+    position: relative;
+    
+    /* Aumentiamo luminosità e contrasto per far leggere meglio le scritte nere */
+    filter: brightness(1.25) contrast(1.1);
+}
+
+/* --- EFFETTI FEEDBACK (Bagliore sotto) --- */
+.bin::after {
+    content: "";
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100px;
+    border-radius: 50%;
+    opacity: 0;
+    filter: blur(25px);
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.glow-success::after {
+    opacity: 0.8;
+    background: var(--green-eco);
+    box-shadow: 0 0 60px 30px var(--green-eco);
+}
+
+.glow-error::after {
+    opacity: 0.8;
+    background: var(--red-alert);
+    box-shadow: 0 0 60px 30px var(--red-alert);
+}
+
+/* --- I RIFIUTI (Trash) --- */
+.trash {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    position: absolute;
+    z-index: 500;
+    cursor: grab;
+    /* Ombra per farli sembrare sollevati */
+    filter: drop-shadow(0 12px 10px rgba(0,0,0,0.4));
+}
+
+.trash:active {
+    cursor: grabbing;
+}
+
+/* --- IL BANCONE (Counter) --- */
+#counter {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background: var(--counter-top);
+    border-top: 3px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Effetto profondità sul bordo del bancone */
+#counter::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+}
