@@ -1,5 +1,5 @@
 {
     "name": "Recycle Dash",
     "descrizione": "Salta per raccogliere tutti i rifiuti",
-    "index": "recycle-dash-v6.html"
+    "index": "src/recycle-dash-v6.html"
 }
