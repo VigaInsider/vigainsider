@@ -252,9 +252,7 @@ e per proporre soluzioni alternative a quelle disastrose e semplicistiche previs
                 <?php component('cards/section-card', [
                     'id' => "Volontariato-ambientale",
                     'titolo' => "Volontariato ambientale - Serena Ratti",
-                    'descrizione' => " Presentazione del gruppo ambientalista e laboratorio sulla fast-fashion
-
-",
+                    'descrizione' => " Presentazione del gruppo ambientalista e laboratorio sulla fast-fashion",
                     'gradientFrom' => 'from-green-500',
                     'gradientTo' => 'to-green-700',
                     'imgPath' => 'img/cards/card_gdt.jpg'
