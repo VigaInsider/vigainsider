@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body,
+      body {
+        background-color: black;
+        margin: 0;
+        color: red;
+        z-index: 0;
+      }
+      .green {
+        background-color: green;
+      }
+      .blue {
+        background-color: blue;
+      }
+      .red {
+        background-color: red;
+      }
+      .yellow {
+        background-color: yellow;
+      }
+      .orange {
+        background-color: #ff8000;
+      }
+      .purple {
+        background-color: purple;
+      }
+
+      #container {
+        width: 90%;
+        height: 100vh;
+        margin: 0 5% 0;
+        border-left: 1px solid red;
+        border-right: 1px solid red;
+        position: relative;
+      }
+      .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 25px;
+        width: 100%;
+        position: absolute;
+      }
+      .brick {
+        height: 25px;
+        width: calc(10% - 2px);
+        border: 1px solid black;
+        position: absolute;
+        top: 0;
+      }
+      .m-top1 {
+        top: 10vh;
+      }
+      .m-top2 {
+        top: calc(10vh + 27px);
+      }
+      .m-top3 {
+        top: calc(10vh + 54px);
+      }
+      .m-top4 {
+        top: calc(10vh + 81px);
+      }
+      .m-top5 {
+        top: calc(10vh + 108px);
+      }
+      #ball {
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        top: 70vh;
+        left: calc(50% - 10px);
+        background-color: white;
+        border-radius: 50%;
+      }
+      #cursor {
+        height: 25px;
+        width: 10%;
+        position: absolute;
+        top: 90vh;
+        margin-left: 45%;
+        left: 0;
+        background-color: white;
+      }
+      .vite,
+      .punteggio {
+        position: absolute;
+        top: 1vh;
+        margin: 0;
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      img {
+        height: 35px;
+        width: 35px;
+      }
+      .vite {
+        left: 1vw;
+      }
+      .vite > *,
+      .punteggio > * {
+        padding: 2px;
+        font-size: 3rem;
+      }
+      .punteggio {
+        right: 1vw;
+      }
+      .button {
+        width: 5%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        position: absolute;
+        right: 0;
+        top: 1vh;
+      }
+      .button button {
+        height: 40px;
+        width: 40px;
+        border: 2px solid red;
+        background: transparent;
+        color: red;
+        border-radius: 10px;
+      }
+      .button button:hover {
+        background-color: red;
+        color: black;
+        cursor: pointer;
+      }
+
+      .popup {
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+      }
+      .popup h1 {
+        text-align: center;
+      }
+      .buttonsEnd button {
+        border: 2px solid red;
+        background: transparent;
+        color: red;
+        border-radius: 10px;
+        font-size: 2rem;
+        padding: 10px;
+        margin: 10px;
+      }
+      .buttonsEnd button:hover {
+        background-color: red;
+        color: black;
+        cursor: pointer;
+      }
+      .flex-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+      }
+      .black {
+        background-color: black;
+      }
+      .indistruttibile {
+        background-color: white;
+        border: 1px solid black;
+        height: 25px;
+        position: absolute;
+        top: 0;
+      }
+      .inizio {
+        background: rgba(0, 0, 0, 0.8);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="vite">
+        <img src="img\ball.png" />
+        <img src="img\x.png" />
+        <h1 id="vite">3</h1>
+      </div>
+      <div class="punteggio">
+        <h1>Punteggio: <span id="punteggio">00000</span></h1>
+      </div>
+      <div class="row m-top1">
+        <div class="brick" style="left: 0"></div>
+        <div class="brick" style="left: 10%"></div>
+        <div class="brick" style="left: 20%"></div>
+        <div class="brick" style="left: 30%"></div>
+        <div class="brick" style="left: 40%"></div>
+        <div class="brick" style="left: 50%"></div>
+        <div class="brick" style="left: 60%"></div>
+        <div class="brick" style="left: 70%"></div>
+        <div class="brick" style="left: 80%"></div>
+        <div class="brick" style="left: 90%"></div>
+      </div>
+      <div class="row m-top2">
+        <div class="brick" style="left: 0"></div>
+        <div class="brick" style="left: 10%"></div>
+        <div class="brick" style="left: 20%"></div>
+        <div class="brick" style="left: 30%"></div>
+        <div class="brick" style="left: 40%"></div>
+        <div class="brick" style="left: 50%"></div>
+        <div class="brick" style="left: 60%"></div>
+        <div class="brick" style="left: 70%"></div>
+        <div class="brick" style="left: 80%"></div>
+        <div class="brick" style="left: 90%"></div>
+      </div>
+      <div class="row m-top3">
+        <div class="brick" style="left: 0"></div>
+        <div class="brick" style="left: 10%"></div>
+        <div class="brick" style="left: 20%"></div>
+        <div class="brick" style="left: 30%"></div>
+        <div class="brick" style="left: 40%"></div>
+        <div class="brick" style="left: 50%"></div>
+        <div class="brick" style="left: 60%"></div>
+        <div class="brick" style="left: 70%"></div>
+        <div class="brick" style="left: 80%"></div>
+        <div class="brick" style="left: 90%"></div>
+      </div>
+
+      <div id="ball"></div>
+
+      <div id="cursor"></div>
+    </div>
+    <div class="button">
+      <button onclick="pausa()" id="pausa">P</button>
+    </div>
+
+    <div id="popup" class="popup inizio">
+      <h1>Brick Breaker!</h1>
+      <h1>Premi 'p' o il tasto sulla destra per mettere pausa e premi poi 'spacebar' per riprendere</h1>
+      <h1>Utilizza 'a', 'd', '←' , '→' per muoverti</h1>
+      <h1>PREMI 'SPACEBAR' PER ANDARE AVANTI</h1>
+    </div>
+
+    <script src="brickBreaker.js"></script>
+  </body>
+</html>

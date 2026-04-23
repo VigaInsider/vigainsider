@@ -1,0 +1,73 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: "Pixelify Sans", sans-serif;
+    background-color: rgb(204, 231, 255);
+}
+
+button {
+    font-family: "Pixelify Sans", sans-serif;
+    cursor: pointer;
+}
+
+#contenitorePunteggio {
+    width: 100vw;
+    height: 5vh;
+    font-size: larger;
+    text-align: center;
+}
+
+#contenitoreGioco {
+    width: 90vw;
+    height: 90vh;
+    border: 0.5vh solid black;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+    background-image: url(sfondo.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#secchio {
+    visibility: hidden;
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 10px;
+    left: 47.5%; 
+    border: solid black 2px;
+    border-radius: 50%;
+}
+
+.rifiuto {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-image: url('monnezza.avif'); 
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: solid black 2px;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+#messaggioIniziale, #messaggioGameOver {
+    position: absolute;
+    width: 50%;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    border: 2px solid black;
+    background-color: rgb(204, 231, 255);
+    padding: 20px;
+    border-radius: 2%;
+}
+
+#messaggioGameOver {
+    display: none;
+}

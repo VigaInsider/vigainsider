@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smista i Rifiuti</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f8f9fa; 
+            padding: 20px;
+            color: black;
+            background-image: url(tree.webp);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .area-gioco {
+            position: relative;
+            height: 400px;
+            background-color: white;
+            margin: 20px auto;
+            width: 80%;
+            border-radius: 15px;
+            border: 5px solid grey;
+            overflow: hidden;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .cestino {
+            width: 120px;
+            height: 120px;
+            background-image: url('cestino.jpg');
+            background-size: cover;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .rifiuto {
+            width: 60px;
+            height: 60px;
+            background-image: url('umido.png');
+            background-size: cover;
+            position: absolute;
+            cursor: grab;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        .rifiuto:hover {
+            transform: scale(1.1);
+        }
+        .punteggio {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: black;
+        }
+        .bottoni {
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #219150;
+        }
+        .home {
+            background-color: #27ae60;
+        }
+        .home:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <h1>Smista i rifiuti umidi!</h1>
+    <div class="area-gioco" id="area-gioco"></div>
+    <div class="punteggio" id="punteggio">Punteggio: 0 | Tempo: 30</div>
+    <div class="bottoni">
+        <button onclick="avviaGioco()">Inizia</button>
+        <button class="home" onclick="location.href='index.html'">Home</button>
+    </div>
+
+    <script>
+        function avviaGioco() {
+            let areaGioco = document.getElementById("area-gioco");
+            let punteggioElemento = document.getElementById("punteggio");
+            areaGioco.innerHTML = "";
+            let punteggio = 0;
+            let tempoRimanente = 30;
+
+            let timer = setInterval(function() {
+                if (tempoRimanente > 0) {
+                    tempoRimanente--;
+                    punteggioElemento.innerHTML = `Punteggio: ${punteggio} | Tempo: ${tempoRimanente}`;
+                } else {
+                    clearInterval(timer);
+                    clearInterval(intervalloRifiuti);
+                    alert(`Gioco finito! Hai smistato ${punteggio} rifiuti correttamente.`);
+                }
+            }, 1000);
+
+            function generaRifiuto() {
+                let rifiuto = document.createElement("div");
+                rifiuto.classList.add("rifiuto");
+                rifiuto.style.left = Math.random() * 70 + "%";
+                rifiuto.style.top = Math.random() * 70 + "%";
+                rifiuto.draggable = true;
+                rifiuto.id = "rifiuto-" + Math.random().toString(36).substr(2, 9);
+
+                rifiuto.ondragstart = function(event) {
+                    event.dataTransfer.setData("text", rifiuto.id);
+                };
+
+                areaGioco.appendChild(rifiuto);
+                setTimeout(() => {
+                    if (rifiuto.parentElement) rifiuto.remove();
+                }, 5000);
+            }
+
+            let cestino = document.createElement("div");
+            cestino.classList.add("cestino");
+            areaGioco.appendChild(cestino);
+
+            cestino.ondragover = function(event) {
+                event.preventDefault();
+            };
+
+            cestino.ondrop = function(event) {
+                event.preventDefault();
+                let idRifiuto = event.dataTransfer.getData("text");
+                let rifiutoTrascinato = document.getElementById(idRifiuto);
+                if (rifiutoTrascinato) {
+                    rifiutoTrascinato.remove();
+                    punteggio++;
+                    punteggioElemento.innerHTML = `Punteggio: ${punteggio} | Tempo: ${tempoRimanente}`;
+                }
+            };
+
+            let intervalloRifiuti = setInterval(generaRifiuto, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acchiappa il rifiuto!</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="contenitorePunteggio">Punteggio: <span id="punteggio"></span></div>
+    <div id="contenitoreGioco">
+        <img src="secchiello.png" alt="imgSecchiello" id="secchio">
+
+        <div id="messaggioIniziale">
+            <h2>Acchiappa il rifiuto!</h2>
+            <p>Muovi il secchio con le frecce ← e → per catturare tutti i rifiuti.</p>
+            <p>Se ne perdi anche solo uno, il gioco finisce!</p>
+            <button id="bottoneInizio" onclick="comincia()">Inizia il gioco</button>
+        </div>
+        
+        <div id="messaggioGameOver">
+            <h2>Game Over!</h2>
+            <p>Hai perso un rifiuto!</p>
+            <p>Punteggio finale: <span id ="punteggioFinale"></span></p>
+            <button id="bottoneRicomincia" onclick="ricomincia()">Gioca ancora</button>
+        </div>
+    </div>
+</body>
+</html>
